@@ -5,6 +5,8 @@
   extern FILE *yyin;
   extern int yylex();
 
+  void yyerror(char *s)
+
   #define YYDEBUG 1
 
 %}
@@ -227,8 +229,8 @@ clausula_iteracion : PARA nombre EN objeto
                       | REPITE HASTA expresion
 
 instruccion_probar_excepto : PROBAR bloque_instrucciones
-                               EXCEPTO [ clausula_excepcion ]+
-                               [ FINALMENTE bloque_instrucciones ]?
+                              EXCEPTO [ clausula_excepcion ]+
+                              [ FINALMENTE bloque_instrucciones ]?
 
 clausula_excepcion : CUANDO nombre EJECUTA bloque_instrucciones
 

@@ -3,6 +3,12 @@
 #include "moronico.h"
 #include "y.tab.h"
 
+/*Posible para error*/
+
+void yyerror(char *);
+
+
+
 %}
 
 /*Macros de apoyo */
@@ -149,7 +155,10 @@ variable { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return
 
 
 {NOP} {}
-. { printf("Error en la linea %d, caracter no reconocido %s\n", yylineno, yytext); }
+
+/* Error*/
+
+. yyerror("Error en la linea %d, caracter no reconocido %s\n", yylineno, yytext);
 
 
 
