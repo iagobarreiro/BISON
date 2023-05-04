@@ -5,248 +5,164 @@
   extern FILE *yyin;
   extern int yylex();
 
-  void yyerror(char *s)
-
   #define YYDEBUG 1
 
 %}
 
-%token ABSTRACTO AND ASOCIATIVA BOOLEANO CABECERA CADENA CASO CARACTER CARGA CLASE CONJUNTO CONSTANTE CUERPO CTC_BOOLEANA CTC_CADENA CTC_CARACTER CTC_ENTERA CTC_REAL CONSTRUCTOR CUANDO CUATRO_PTOS DESCENDENTE DESPD DESPI DESTRUCTOR DE DEVOLVER DOS_PTOS EJECUTA ELEMENTO EN ENTERO ENTONCES EQ ESPECIFICO EXCEPTO FICHERO FINAL FINALMENTE FLECHA_DOBLE FUNCION GEQ GENERICO HASTA IDENTIFICADOR INTERFAZ LANZAR LEQ LISTA MIENTRAS MODIFICABLE NEQ OTRO OR PAQUETE PARA PATH POTENCIA PRIVADO PROBAR PROCEDIMIENTO PROGRAMA PUBLICO REAL REGISTRO REPITE SEA SALIR SEMIPUBLICO SI SINO TIPO VARIABLE
+%token ABSTRACTO AND ASOCIATIVA BOOLEANO CABECERA CADENA CASO CARACTER CARGA CLASE CONJUNTO CONSTANTE CUERPO CTC_BOOLEANA CTC_CADENA CTC_CARACTER CTC_ENTERA CTC_REAL 
+%token CONSTRUCTOR CUANDO CUATRO_PTOS DESCENDENTE DESPD DESPI DESTRUCTOR DE DEVOLVER DOS_PTOS EJECUTA ELEMENTO EN ENTERO ENTONCES EQ ESPECIFICO EXCEPTO FICHERO FINAL 
+%token FINALMENTE FLECHA_DOBLE FUNCION GEQ GENERICO HASTA IDENTIFICADOR INTERFAZ LANZAR LEQ LISTA MIENTRAS MODIFICABLE NEQ OTRO OR PAQUETE PARA PATH POTENCIA PRIVADO 
+%token PROBAR PROCEDIMIENTO PROGRAMA PUBLICO REAL REGISTRO REPITE SEA SALIR SEMIPUBLICO SI SINO TIPO VARIABLE
 
 %%
 
-/*****************************************PROGRAMA****************************************/
-programa : definicion_programa
-          | definicion_paquete
+/********************************/
+/* programas, paquetes y cargas */
+/********************************/
 
-definicion_programa : PROGRAMA nombre ';' bloque_programa
+programa : definicion_programa {printf("\t programa -> def_programa \n");}
+          | definicion_paquete {printf("\t programa -> def_paquete \n");}
+          ;
 
-nombre : [ IDENTIFICADOR '::' ]* IDENTIFICADOR
+definicion_programa : PROGRAMA nombre ';' bloque_programa {printf("\t def_programa -> PROGRAMA ';' bloque_programa \n");}
+          ;
 
-bloque_programa : [ declaracion_cargas ]?
-                    [ declaracion_tipos ]?
-                    [ declaracion_constantes ]?
-                    [ declaracion_variables ]?
-                    bloque_instrucciones
+nombre : identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
+          ;
 
-bloque_instrucciones : '{' [ instruccion ]+ '}'
+identificador_con_cuatro_ptos_ceroomas : %empty
+                                        | identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR CUATRO_PTOS {printf("\t identificador_con_cuatro_ptos_ceroomas -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR '::' \n");}
+                                        | IDENTIFICADOR CUATRO_PTOS {printf("\t identificador_con_cuatro_ptos_ceroomas -> IDENTIFICADOR '::' \n");}
+                                        ;
 
-definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo
+bloque_programa : declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op bloque_instrucciones \n");}
+          ;
 
-seccion_cabecera : CABECERA
-                    [ declaracion_cargas ]?
-                    [ declaracion_tipos ]?
-                    [ declaracion_constantes ]?
-                    [ declaracion_variables ]?
-                    [ declaracion_interfaces ]?
+bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instrucciones -> '{' instruccion_unoomas '}'  \n");}
+            ;
 
-seccion_cuerpo : CUERPO
-                    [ declaracion_tipos ]?
-                    [ declaracion_constantes ]?
-                    [ declaracion_variables ]?
-                    [ declaracion_subprograma ]+
+instruccion_unoomas : instruccion_unoomas instruccion {printf("\t instruccion_unoomas -> instruccion_unoomas instruccion  \n");}
+                      | instruccion {printf("\t instruccion_unoomas -> instruccion  \n");}
+                      | %empty
+                      ; 
 
-declaracion_cargas : CARGA ( declaracion_carga )+ ';'
+definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo {printf("\t definicion_paquete -> PAQUETE nombre ';' seccion_cabecera seccion_cuerpo  \n");}
+                    ;
 
-declaracion_carga : nombre [ EN PATH ]? [ '(' ( nombre )+ ')' ]?
+seccion_cabecera : CABECERA declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_interfaces_op {printf("\t seccion_cabecera -> CABECERA declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_interfaces_op  \n");}
+                  ;
 
+seccion_cuerpo : CUERPO declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_subpograma_unoomas {printf("\t seccion_cuerpo -> CUERPO declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_subpograma_unoomas  \n");}
 
-/*****************************************TIPOS*******************************************/
-declaracion_tipos : TIPO [ declaracion_tipo ]+
+declaracion_cargas_op : %empty
+                | CARGA declaracion_carga_unoomas ';' {printf("\t declaracion_cargas_op -> CARGA declaracion_carga_unoomas ';'  \n");}
+                ;
 
-declaracion_tipo : nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
-                    | nombre '=' tipo_estructurado
+declaracion_carga_unoomas : declaracion_carga_unoomas ',' nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> declaracion_carga_unoomas ',' nombre en_path_op nombres_op  \n");}
+                    | nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> nombre en_path_op nombres_op  \n");}
 
-tipo_no_estructurado_o_nombre_tipo : nombre
-                                    | tipo_escalar
-                                    | tipo_fichero
-                                    | tipo_enumerado
-                                    | tipo_lista
-                                    | tipo_lista_asociativa
-                                    | tipo_conjunto
-tipo_estructurado : tipo_registro | declaracion_clase
+en_path_op : %empty
+            | EN PATH {printf("\t en_path_op -> EN PATH  \n");}
+            ;
 
-tipo_escalar : ENTERO | REAL | BOOLEANO | CARACTER | CADENA
+nombres_op : %empty
+            | '('  nombres_comas ')' {printf("\t nombres_op -> '('  nombres_comas ')'  \n");}
+            ;
 
-tipo_fichero : FICHERO
+nombres_comas : nombres_comas ',' nombre {printf("\t nombres_comas -> nombres_comas ',' nombre  \n");}
+              | nombre {printf("\t nombres_comas -> nombre  \n");}
+              ;
 
-tipo_enumerado : '(' ( expresion_constante )+ ')'
 
-tipo_lista : LISTA [ '[' ( rango )+ ']' ]? DE tipo_no_estructurado_o_nombre_tipo
+/************************/
+/* tipos (incl. clases) */
+/************************/
 
-rango : expresion '..' expresion [ '..' expresion ]?
+declaracionlaracion_tipos : TIPO declaracion_tipo_unoomas {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo_unoomas  \n");}
+          ;
+        
+declaracion_tipo_unoomas : declaracion_carga_unoomas nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo_unoomas -> declaracion_carga_unoomas nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
+                 | declaracion_carga_unoomas nombre '=' tipo_estructurado {printf("\t declaracion_tipo_unoomas -> declaracion_carga_unoomas nombre '=' tipo_estructurado  \n");}
+                 |  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo_unoomas -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
+                 |  nombre '=' tipo_estructurado {printf("\t declaracion_tipo_unoomas -> nombre '=' tipo_estructurado  \n");}
+                 ;
 
-tipo_lista_asociativa : LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo
 
-tipo_conjunto = CONJUNTO DE tipo_no_estructurado_o_nombre_tipo
+tipo_no_estructurado_o_nombre_tipo : nombre {printf("\t tipo_no_estructurado_o_nombre_tipo -> nombre  \n");}
+                                    | tipo_escalar {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_escalar  \n");}
+                                    | tipo_fichero {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_fichero  \n");}
+                                    | tipo_enumerado {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_enumerado  \n");}
+                                    | tipo_lista {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_lista  \n");}
+                                    | tipo_lista_asociativa {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_lista_asociativa  \n");}
+                                    | tipo_conjunto {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_conjunto  \n");}
+                                    ;
 
-tipo_registro : REGISTRO '{' [ declaracion_campo ]+ '}'
+tipo_estructurado : tipo_registro {printf("\t tipo_estructurado -> tipo_registro  \n");}
+                  | declaracion_clase {printf("\t tipo_estructurado -> declaracion_clase  \n");}
+                  ;
 
-declaracion_campo : ( nombre )+ ':' tipo_no_estructurado_o_nombre_tipo ';'
+tipo_escalar : ENTERO {printf("\t tipo_escalar -> ENTERO  \n");}
+            | REAL {printf("\t tipo_escalar -> REAL  \n");}
+            | BOOLEANO {printf("\t tipo_escalar -> BOOLEANO  \n");}
+            | CARACTER {printf("\t tipo_escalar -> CARACTER  \n");}
+            | CADENA {printf("\t tipo_escalar -> CADENA  \n");}
+            ;
 
+tipo_fichero : FICHERO {printf("\t tipo_fichero -> FICHERO  \n");}
+             ;
 
+tipo_enumerado : '(' expresion_constante_unoomas ')' {printf("\t tipo_enumerado -> '(' expresion_constante_unoomas ')'  \n");}
+                ;
 
-/***************************************CONSTANTES****************************************/
+expresion_constante_unoomas : expresion_constante_unoomas ',' expresion_constante {printf("\t expresion_constante_unoomas -> expresion_constante_unoomas ',' expresion_constante  \n");}
+                              | expresion_constante {printf("\t expresion_constante_unoomas -> expresion_constante  \n");}
+                              ;
 
-declaracion_constantes : CONSTANTE [ declaracion_constante ]+
+tipo_lista : LISTA rango_lista DE tipo_no_estructurado_o_nombre_tipo {printf("\t tipo_lista -> LISTA rango_lista DE tipo_no_estructurado_o_nombre_tipo  \n");}
+            ;
 
-declaracion_constante : nombre ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
+rango_lista : rango_lista ',' rango {printf("\t rango_lista ->  rango_lista ',' rango  \n");}
+            | rango {printf("\t rango_lista -> rango  \n");}
+            ;
 
-valor_constante : expresion
-                  | '[' ( valor_constante )+ ']'
-                  | '[' ( clave_valor )+ ']'
-                  | '[' ( campo_valor )+ ']'
+rango : expresion DOS_PTOS expresion expresion_rango_op {printf("\t rango -> expresion DOS_PTOS expresion expresion_rango_op  \n");}
+      ;
 
-clave_valor : CTC_CADENA '=>' valor_constante
+expresion_rango_op : %empty
+                    | DOS_PTOS expresion  {printf("\t expresion_rango_op -> DOS_PTOS expresion  \n");}
+                    ;
 
-campo_valor : nombre '=>' valor_constante
+tipo_lista_asociativa : LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo {printf("\t tipo_lista_asociativa -> LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo  \n");}
+                      ;
 
+tipo_conjunto : CONJUNTO DE tipo_no_estructurado_o_nombre_tipo {printf("\t tipo_conjunto -> CONJUNTO DE tipo_no_estructurado_o_nombre_tipo  \n");}
+              ;
 
+tipo_registro : REGISTRO '{' declaracion_campo '}' {printf("\t tipo_registro -> REGISTRO '{' declaracion_campo '}'  \n");}
+              ;
 
-/***************************************VARIABLES****************************************/
+declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_campo -> declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'  \n");}                
+                  ;
 
-declaracion_variables : VARIABLE [ declaracion_variable ]+
 
-declaracion_variable : ( nombre )+
-                      ':'
-                      tipo_no_estructurado_o_nombre_tipo
-                      [ '=' valor_constante ]?
-                      ';'
+/*************************************/
+/* constantes, variables, interfaces */
+/*************************************/
 
+//2.3. Declaraci´on de constantes, variables e interfaces
 
-/**************************************INTERFACES****************************************/
 
-declaracion_interfaces : INTERFAZ [ cabecera_subprograma ';' ]+
+/****************/
+/* subprogramas */
+/****************/
 
+/*****************/
+/* instrucciones */
+/*****************/
 
-/****************************************CLASES******************************************/
-
-declaracion_clase : CLASE
-                      [ FINAL ]?
-                      [ '(' ( nombre )+ ')' ]?
-                      '{'
-                      declaraciones_publicas
-                      [ declaraciones_semi ]?
-                      [ declaraciones_privadas ]?
-                      '}'
-
-declaraciones_publicas : [ PUBLICO ]? [ declaracion_componente ]+
-
-declaraciones_semi : SEMIPUBLICO [ declaracion_componente ]+
-
-declaraciones_privadas : PRIVADO [ declaracion_componente ]+
-
-declaracion_componente : declaracion_tipo_anidado
-                        | declaracion_constante_anidada
-                        | declaracion_atributos
-                        | cabecera_subprograma ';' [ modificadores ';' ]?
-
-declaracion_tipo_anidado : TIPO declaracion_tipo
-
-declaracion_constante_anidada : CONSTANTE declaracion_constante
-
-declaracion_atributos : ( nombre )+ ':' tipo_no_estructurado_o_nombre_tipo ';'
-
-modificadores : ( modificador )+
-
-modificador : GENERICO | ABSTRACTO | ESPECIFICO | FINAL
-
-
-/*************************************SUBPROGRAMAS****************************************/
-
-declaracion_subprograma : cabecera_subprograma bloque_subprograma
-
-cabecera_subprograma : cabecera_funcion
-                      | cabecera_procedimiento
-                      | cabecera_constructor
-                      | cabecera_destructor
-
-cabecera_funcion : FUNCION
-                    nombre
-                    [ declaracion_parametros ]?
-                    '=>'
-                    tipo_no_estructurado_o_nombre_tipo
-
-cabecera_procedimiento : PROCEDIMIENTO nombre [ declaracion_parametros ]?
-
-cabecera_constructor : CONSTRUCTOR nombre [ declaracion_parametros ]?
-
-cabecera_destructor : DESTRUCTOR nombre
-
-declaracion_parametros : '(' lista_parametros_formales ')'
-
-lista_parametros_formales : parametros_formales
-                            | lista_parametros_formales ';' parametros_formales
-
-
-parametros_formales : ( nombre )+ ':' tipo_no_estructurado_o_nombre_tipo [ MODIFICABLE ]?
-
-bloque_subprograma : [ declaracion_tipos ]?
-                       [ declaracion_constantes ]?
-                       [ declaracion_variables ]?
-                       bloque_instrucciones
-
-
-/*************************************INSTRUCCIONES***************************************/
-instruccion : ';'
-              | instruccion_asignacion
-              | instruccion_salir
-              | instruccion_devolver
-              | instruccion_llamada
-              | instruccion_si
-              | instruccion_casos
-              | instruccion_bucle
-              | instruccion_probar_excepto
-              | instruccion_lanzar
-
-instruccion_asignacion : objeto '=' expresion ';'
-
-instruccion_salir : SALIR [ SI expresion ]? ';'
-
-instruccion_devolver : DEVOLVER [ expresion ]? ';'
-
-instruccion_llamada : llamada_subprograma ';'
-
-llamada_subprograma : nombre '(' ( expresion )* ')'
-
-instruccion_si : SI expresion
-                   ENTONCES bloque_instrucciones
-                   [ SINO bloque_instrucciones ]?
-
-instruccion_casos : EN CASO expresion 'es' [ caso ]+ ';'
-
-caso : CUANDO entradas '=>' bloque_instrucciones
-
-entradas : [ entrada '|' ]* entrada
-
-entrada : expresion | rango | OTRO
-
-instruccion_bucle : clausula_iteracion bloque_instrucciones
-
-clausula_iteracion : PARA nombre EN objeto
-                      | REPITE ELEMENTO nombre EN rango [ DESCENDENTE ]?
-                      | MIENTRAS expresion
-                      | REPITE HASTA expresion
-
-instruccion_probar_excepto : PROBAR bloque_instrucciones
-                              EXCEPTO [ clausula_excepcion ]+
-                              [ FINALMENTE bloque_instrucciones ]?
-
-clausula_excepcion : CUANDO nombre EJECUTA bloque_instrucciones
-
-instruccion_lanzar : LANZAR nombre ';'
-
-
-/******************************EXPRESIONES (SOLO OPERANDOS)*******************************/
-
-expresion_primaria : expresion_constante | objeto | llamada_subprograma | '(' expresion ')'
-
-objeto : nombre
-          | objeto '[' ( expresion )+ ']'
-          | objeto '.' IDENTIFICADOR
-          
-expresion_constante : CTC_ENTERA | CTC_REAL | CTC_CADENA | CTC_CARACTER | CTC_BOOLEANA
-
+/***************/
+/* expresiones */
+/***************/
 
 %%
 

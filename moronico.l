@@ -156,10 +156,9 @@ variable { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return
 
 {NOP} {}
 
-/* Error*/
 
-. yyerror("Error en la linea %d, caracter no reconocido %s\n", yylineno, yytext);
 
+. { printf ("Error en la linea %d, caracter no reconocido %s\n", yylineno, yytext); }
 
 
 %%
