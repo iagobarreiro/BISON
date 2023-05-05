@@ -27,6 +27,7 @@ programa : definicion_programa {printf("\t programa -> def_programa \n");}
 definicion_programa : PROGRAMA nombre ';' bloque_programa {printf("\t def_programa -> PROGRAMA ';' bloque_programa \n");}
           ;
 
+
 nombre : identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
           ;
 
@@ -60,6 +61,7 @@ declaracion_cargas_op : %empty
 
 declaracion_carga_unoomas : declaracion_carga_unoomas ',' nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> declaracion_carga_unoomas ',' nombre en_path_op nombres_op  \n");}
                     | nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> nombre en_path_op nombres_op  \n");}
+                    ;
 
 en_path_op : %empty
             | EN PATH {printf("\t en_path_op -> EN PATH  \n");}
@@ -149,8 +151,43 @@ declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_n
 /* constantes, variables, interfaces */
 /*************************************/
 
-//2.3. Declaraci´on de constantes, variables e interfaces
+declaracion_constantes : CONSTANTE declaracion_constante_unoomas
+                        ;
 
+declaracion_constante_unoomas : declaracion_constante_unoomas nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+                              | nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+
+valor_constante: expresion
+                | '[' valor_constante_comas ']'
+                | '[' clave_valor ']'
+                | '[' campo_valor ']'
+                ;
+
+valor_constante_comas : valor_constante_comas ',' valor_constante
+                      | valor_constante
+                      ;
+
+clave_valor : clave_valor ',' CTC_CADENA FLECHA_DOBLE valor_constante
+            | CTC_CADENA FLECHA_DOBLE valor_constante
+            ;
+
+campo_valor : campo_valor ',' nombre FLECHA_DOBLE valor_constante
+            | nombre FLECHA_DOBLE valor_constante
+            ;              
+
+declaracion_variables : VARIABLE declaracion_variable
+                      ;
+
+declaracion_variable : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
+                      | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+                      ;
+
+
+declaracion_interfaces : declaracion_interfaces INTERFAZ cabecera_subprograma ';'
+                        | INTERFAZ cabecera_subprograma ';'
+                        ;
+
+// 2.4. Declaraci´on de clases
 
 /****************/
 /* subprogramas */
