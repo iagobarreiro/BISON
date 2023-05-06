@@ -78,13 +78,14 @@ nombres_comas : nombres_comas ',' nombre {printf("\t nombres_comas -> nombres_co
 /* tipos (incl. clases) */
 /************************/
 
-declaracion_tipos : 
-                  | declaracion_tipos TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> declaracionlaracion_tipos TIPO declaracion_tipo  \n");}
+declaracion_tipos :
                   | TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo  \n");}
-                   ;
+                  ;
 
 
-declaracion_tipo :  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
+declaracion_tipo :  declaracion_tipo nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
+                 |  declaracion_tipo nombre '=' tipo_estructurado
+                 |  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
                  |  nombre '=' tipo_estructurado {printf("\t declaracion_tipo -> nombre '=' tipo_estructurado  \n");}
                  ;              
 
@@ -150,12 +151,15 @@ declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_n
 /* constantes, variables, interfaces */
 /*************************************/
 
-declaracion_constantes : 
-                        | declaracion_constantes CONSTANTE declaracion_constante
-                        | CONSTANTE declaracion_constante
+declaracion_constantes :| CONSTANTE declaracion_constante_unoomas
                         ;
 
+declaracion_constante_unoomas : declaracion_constante_unoomas declaracion_constante
+                              | declaracion_constante
+                              ;
+
 declaracion_constante : nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+                      ;
 
 valor_constante: expresion
                 | '[' valor_constante_comas ']'
@@ -184,9 +188,7 @@ declaracion_variable : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' 
                       ;
 
 
-declaracion_interfaces :  
-                        | declaracion_interfaces INTERFAZ cabecera_subprograma ';'
-                        | INTERFAZ cabecera_subprograma ';'
+declaracion_interfaces : INTERFAZ cabecera_subprograma_unoomas
                         ;
 
 
@@ -231,7 +233,7 @@ declaracion_tipo_anidado : TIPO declaracion_tipo
                          ;
 
 declaracion_constante_anidada : CONSTANTE declaracion_constante
-                                ;
+                              ;
 
 declaracion_atributos : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
                       ;
@@ -264,6 +266,9 @@ cabecera_subprograma : cabecera_funcion
                      | cabecera_constructor
                      | cabecera_destructor
                      ;
+
+cabecera_subprograma_unoomas : cabecera_subprograma_unoomas cabecera_subprograma ;
+                             | cabecera_subprograma ;
 
 cabecera_funcion : FUNCION nombre declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
                  ;

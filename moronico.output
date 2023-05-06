@@ -1,0 +1,4624 @@
+Terminals unused in grammar
+
+   AND
+   DESPD
+   DESPI
+   EQ
+   GEQ
+   LEQ
+   NEQ
+   OR
+   POTENCIA
+
+
+Estado 286 conflictos: 1 reducción(ones)/reducción(ones)
+
+
+Gramática
+
+    0 $accept: programa $end
+
+    1 programa: definicion_programa
+    2         | definicion_paquete
+
+    3 definicion_programa: PROGRAMA nombre ';' bloque_programa
+
+    4 nombre: id_op IDENTIFICADOR
+
+    5 id_op: /* vacío */
+    6      | id_op IDENTIFICADOR CUATRO_PTOS
+
+    7 bloque_programa: declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
+
+    8 bloque_instrucciones: '{' instruccion_unoomas '}'
+
+    9 instruccion_unoomas: instruccion_unoomas instruccion
+   10                    | instruccion
+
+   11 definicion_paquete: PAQUETE nombre ';' seccion_cabecera seccion_cuerpo
+
+   12 seccion_cabecera: CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces
+
+   13 seccion_cuerpo: CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma
+
+   14 declaracion_cargas: /* vacío */
+   15                   | CARGA declaracion_carga_unoomas ';'
+
+   16 declaracion_carga_unoomas: nombre en_path_op nombres_op
+   17                          | declaracion_carga_unoomas ',' nombre en_path_op nombres_op
+
+   18 en_path_op: /* vacío */
+   19           | EN PATH
+
+   20 nombres_op: /* vacío */
+   21           | '(' nombres_comas ')'
+
+   22 nombres_comas: nombres_comas ',' nombre
+   23              | nombre
+
+   24 declaracion_tipos: /* vacío */
+   25                  | TIPO declaracion_tipo
+
+   26 declaracion_tipo: declaracion_tipo nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
+   27                 | declaracion_tipo nombre '=' tipo_estructurado
+   28                 | nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
+   29                 | nombre '=' tipo_estructurado
+
+   30 tipo_no_estructurado_o_nombre_tipo: nombre
+   31                                   | tipo_escalar
+   32                                   | tipo_fichero
+   33                                   | tipo_enumerado
+   34                                   | tipo_lista
+   35                                   | tipo_lista_asociativa
+   36                                   | tipo_conjunto
+
+   37 tipo_estructurado: tipo_registro
+   38                  | declaracion_clase
+
+   39 tipo_escalar: ENTERO
+   40             | REAL
+   41             | BOOLEANO
+   42             | CARACTER
+   43             | CADENA
+
+   44 tipo_fichero: FICHERO
+
+   45 tipo_enumerado: '(' expresion_constante_unoomas ')'
+
+   46 expresion_constante_unoomas: expresion_constante
+   47                            | expresion_constante_unoomas ',' expresion_constante
+
+   48 tipo_lista: LISTA rango_lista DE tipo_no_estructurado_o_nombre_tipo
+
+   49 rango_lista: rango_lista ',' rango
+   50            | rango
+
+   51 rango: expresion DOS_PTOS expresion expresion_rango_op
+
+   52 expresion_rango_op: /* vacío */
+   53                   | DOS_PTOS expresion
+
+   54 tipo_lista_asociativa: LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo
+
+   55 tipo_conjunto: CONJUNTO DE tipo_no_estructurado_o_nombre_tipo
+
+   56 tipo_registro: REGISTRO '{' declaracion_campo '}'
+
+   57 declaracion_campo: declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+   58                  | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+   59 declaracion_constantes: /* vacío */
+   60                       | CONSTANTE declaracion_constante_unoomas
+
+   61 declaracion_constante_unoomas: declaracion_constante_unoomas declaracion_constante
+   62                              | declaracion_constante
+
+   63 declaracion_constante: nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+
+   64 valor_constante: expresion
+   65                | '[' valor_constante_comas ']'
+   66                | '[' clave_valor ']'
+   67                | '[' campo_valor ']'
+
+   68 valor_constante_comas: valor_constante_comas ',' valor_constante
+   69                      | valor_constante
+
+   70 clave_valor: clave_valor ',' CTC_CADENA FLECHA_DOBLE valor_constante
+   71            | CTC_CADENA FLECHA_DOBLE valor_constante
+
+   72 campo_valor: campo_valor ',' nombre FLECHA_DOBLE valor_constante
+   73            | nombre FLECHA_DOBLE valor_constante
+
+   74 declaracion_variables: /* vacío */
+   75                      | VARIABLE declaracion_variable
+
+   76 declaracion_variable: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
+   77                     | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+   78 declaracion_interfaces: INTERFAZ cabecera_subprograma_unoomas
+
+   79 declaracion_clase: declaracion_clase_mod
+   80                  | declaracion_clase_nomod
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   82                      | CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   84                        | CLASE '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+   85 declaraciones_publicas: PUBLICO declaracion_componente_unoomas
+   86                       | declaracion_componente_unoomas
+
+   87 declaraciones_semi: /* vacío */
+   88                   | SEMIPUBLICO declaracion_componente_unoomas
+
+   89 declaraciones_privadas: /* vacío */
+   90                       | PRIVADO declaracion_componente_unoomas
+
+   91 declaracion_componente_unoomas: declaracion_componente
+   92                               | declaracion_componente_unoomas declaracion_componente
+
+   93 declaracion_componente: declaracion_tipo_anidado
+   94                       | declaracion_constante_anidada
+   95                       | declaracion_atributos
+   96                       | cabecera_subprograma ';' modificadores ';'
+   97                       | cabecera_subprograma ';'
+
+   98 declaracion_tipo_anidado: TIPO declaracion_tipo
+
+   99 declaracion_constante_anidada: CONSTANTE declaracion_constante
+
+  100 declaracion_atributos: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+  101 modificadores: modificador_comas
+
+  102 modificador_comas: modificador_comas ',' modificador
+  103                  | modificador
+
+  104 modificador: GENERICO
+  105            | ABSTRACTO
+  106            | ESPECIFICO
+  107            | FINAL
+
+  108 declaracion_subprograma: declaracion_subprograma cabecera_subprograma bloque_subprograma
+  109                        | cabecera_subprograma bloque_subprograma
+
+  110 cabecera_subprograma: cabecera_funcion
+  111                     | cabecera_procedimiento
+  112                     | cabecera_constructor
+  113                     | cabecera_destructor
+
+  114 cabecera_subprograma_unoomas: cabecera_subprograma_unoomas cabecera_subprograma
+  115                             | cabecera_subprograma
+
+  116 cabecera_funcion: FUNCION nombre declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
+
+  117 cabecera_procedimiento: PROCEDIMIENTO nombre declaracion_parametros
+
+  118 cabecera_constructor: CONSTRUCTOR nombre declaracion_parametros
+
+  119 cabecera_destructor: DESTRUCTOR nombre
+
+  120 declaracion_parametros: /* vacío */
+  121                       | '(' lista_parametros_formales ')'
+
+  122 lista_parametros_formales: parametros_formales
+  123                          | lista_parametros_formales ';' parametros_formales
+
+  124 parametros_formales: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo MODIFICABLE
+  125                    | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo
+
+  126 bloque_subprograma: declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
+
+  127 instruccion: ';'
+  128            | instruccion_asignacion
+  129            | instruccion_salir
+  130            | instruccion_devolver
+  131            | instruccion_llamada
+  132            | instruccion_si
+  133            | instruccion_casos
+  134            | instruccion_bucle
+  135            | instruccion_probar_excepto
+  136            | instruccion_lanzar
+
+  137 instruccion_asignacion: objeto '=' expresion ';'
+
+  138 instruccion_salir: SALIR SI expresion ';'
+  139                  | SALIR ';'
+
+  140 instruccion_devolver: DEVOLVER expresion ';'
+  141                     | DEVOLVER ';'
+
+  142 instruccion_llamada: llamada_subprograma ';'
+
+  143 llamada_subprograma: nombre '(' expresion_comas ')' nombre '(' ')'
+
+  144 expresion_comas: expresion_comas ',' expresion
+  145                | expresion
+
+  146 instruccion_si: SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones
+  147               | SI expresion ENTONCES bloque_instrucciones
+
+  148 instruccion_casos: EN CASO expresion SEA caso ';'
+
+  149 caso: caso entradas FLECHA_DOBLE bloque_instrucciones
+  150     | entradas FLECHA_DOBLE bloque_instrucciones
+
+  151 entradas: entradas_op entrada
+
+  152 entradas_op: /* vacío */
+  153            | entradas_op entrada '|'
+
+  154 entrada: expresion
+  155        | rango
+  156        | OTRO
+
+  157 instruccion_bucle: clausula_iteracion bloque_instrucciones
+
+  158 clausula_iteracion: PARA nombre EN objeto
+  159                   | REPITE ELEMENTO nombre EN rango DESCENDENTE
+  160                   | REPITE ELEMENTO nombre EN rango
+  161                   | MIENTRAS expresion
+  162                   | REPITE HASTA expresion
+
+  163 instruccion_probar_excepto: PROBAR bloque_instrucciones EXCEPTO clausula_excepcion FINALMENTE bloque_instrucciones
+  164                           | PROBAR bloque_instrucciones EXCEPTO clausula_excepcion
+
+  165 clausula_excepcion: CUANDO nombre EJECUTA bloque_instrucciones
+
+  166 instruccion_lanzar: LANZAR nombre ';'
+
+  167 objeto: nombre
+  168       | objeto '[' expresion_comas ']'
+  169       | objeto '.' IDENTIFICADOR
+
+  170 expresion_constante: CTC_ENTERA
+  171                    | CTC_REAL
+  172                    | CTC_CADENA
+  173                    | CTC_CARACTER
+  174                    | CTC_BOOLEANA
+
+  175 expresion_primaria: expresion_constante
+  176                   | objeto
+  177                   | llamada_subprograma
+  178                   | '(' expresion ')'
+
+  179 expresion: expresion_primaria
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+'(' (40) 21 45 81 82 83 84 121 143 178
+')' (41) 21 45 81 82 83 84 121 143 178
+',' (44) 17 22 47 49 68 70 72 102 144
+'.' (46) 169
+':' (58) 57 58 76 77 100 124 125
+';' (59) 3 11 15 26 28 57 58 63 76 77 96 97 100 123 127 137 138 139
+    140 141 142 148 166
+'=' (61) 26 27 28 29 63 76 137
+'[' (91) 65 66 67 168
+']' (93) 65 66 67 168
+'{' (123) 8 56 81 82 83 84
+'|' (124) 153
+'}' (125) 8 56 81 82 83 84
+error (256)
+ABSTRACTO (258) 105
+AND (259)
+ASOCIATIVA (260) 54
+BOOLEANO (261) 41
+CABECERA (262) 12
+CADENA (263) 43
+CASO (264) 148
+CARACTER (265) 42
+CARGA (266) 15
+CLASE (267) 81 82 83 84
+CONJUNTO (268) 55
+CONSTANTE (269) 60 99
+CUERPO (270) 13
+CTC_BOOLEANA (271) 174
+CTC_CADENA (272) 70 71 172
+CTC_CARACTER (273) 173
+CTC_ENTERA (274) 170
+CTC_REAL (275) 171
+CONSTRUCTOR (276) 118
+CUANDO (277) 165
+CUATRO_PTOS (278) 6
+DESCENDENTE (279) 159
+DESPD (280)
+DESPI (281)
+DESTRUCTOR (282) 119
+DE (283) 48 54 55
+DEVOLVER (284) 140 141
+DOS_PTOS (285) 51 53
+EJECUTA (286) 165
+ELEMENTO (287) 159 160
+EN (288) 19 148 158 159 160
+ENTERO (289) 39
+ENTONCES (290) 146 147
+EQ (291)
+ESPECIFICO (292) 106
+EXCEPTO (293) 163 164
+FICHERO (294) 44
+FINAL (295) 81 82 107
+FINALMENTE (296) 163
+FLECHA_DOBLE (297) 70 71 72 73 116 149 150
+FUNCION (298) 116
+GEQ (299)
+GENERICO (300) 104
+HASTA (301) 162
+IDENTIFICADOR (302) 4 6 169
+INTERFAZ (303) 78
+LANZAR (304) 166
+LEQ (305)
+LISTA (306) 48 54
+MIENTRAS (307) 161
+MODIFICABLE (308) 124
+NEQ (309)
+OTRO (310) 156
+OR (311)
+PAQUETE (312) 11
+PARA (313) 158
+PATH (314) 19
+POTENCIA (315)
+PRIVADO (316) 90
+PROBAR (317) 163 164
+PROCEDIMIENTO (318) 117
+PROGRAMA (319) 3
+PUBLICO (320) 85
+REAL (321) 40
+REGISTRO (322) 56
+REPITE (323) 159 160 162
+SEA (324) 148
+SALIR (325) 138 139
+SEMIPUBLICO (326) 88
+SI (327) 138 146 147
+SINO (328) 146
+TIPO (329) 25 98
+VARIABLE (330) 75
+
+
+No terminales con las reglas donde aparecen
+
+$accept (88)
+    en la izquierda: 0
+programa (89)
+    en la izquierda: 1 2, en la derecha: 0
+definicion_programa (90)
+    en la izquierda: 3, en la derecha: 1
+nombre (91)
+    en la izquierda: 4, en la derecha: 3 11 16 17 22 23 26 27 28 29
+    30 63 72 73 116 117 118 119 143 158 159 160 165 166 167
+id_op (92)
+    en la izquierda: 5 6, en la derecha: 4 6
+bloque_programa (93)
+    en la izquierda: 7, en la derecha: 3
+bloque_instrucciones (94)
+    en la izquierda: 8, en la derecha: 7 126 146 147 149 150 157 163
+    164 165
+instruccion_unoomas (95)
+    en la izquierda: 9 10, en la derecha: 8 9
+definicion_paquete (96)
+    en la izquierda: 11, en la derecha: 2
+seccion_cabecera (97)
+    en la izquierda: 12, en la derecha: 11
+seccion_cuerpo (98)
+    en la izquierda: 13, en la derecha: 11
+declaracion_cargas (99)
+    en la izquierda: 14 15, en la derecha: 7 12
+declaracion_carga_unoomas (100)
+    en la izquierda: 16 17, en la derecha: 15 17
+en_path_op (101)
+    en la izquierda: 18 19, en la derecha: 16 17
+nombres_op (102)
+    en la izquierda: 20 21, en la derecha: 16 17
+nombres_comas (103)
+    en la izquierda: 22 23, en la derecha: 21 22 57 58 76 77 82 83
+    100 124 125
+declaracion_tipos (104)
+    en la izquierda: 24 25, en la derecha: 7 12 13 126
+declaracion_tipo (105)
+    en la izquierda: 26 27 28 29, en la derecha: 25 26 27 98
+tipo_no_estructurado_o_nombre_tipo (106)
+    en la izquierda: 30 31 32 33 34 35 36, en la derecha: 26 28 48
+    54 55 57 58 63 76 77 100 116 124 125
+tipo_estructurado (107)
+    en la izquierda: 37 38, en la derecha: 27 29
+tipo_escalar (108)
+    en la izquierda: 39 40 41 42 43, en la derecha: 31
+tipo_fichero (109)
+    en la izquierda: 44, en la derecha: 32
+tipo_enumerado (110)
+    en la izquierda: 45, en la derecha: 33
+expresion_constante_unoomas (111)
+    en la izquierda: 46 47, en la derecha: 45 47
+tipo_lista (112)
+    en la izquierda: 48, en la derecha: 34
+rango_lista (113)
+    en la izquierda: 49 50, en la derecha: 48 49
+rango (114)
+    en la izquierda: 51, en la derecha: 49 50 155 159 160
+expresion_rango_op (115)
+    en la izquierda: 52 53, en la derecha: 51
+tipo_lista_asociativa (116)
+    en la izquierda: 54, en la derecha: 35
+tipo_conjunto (117)
+    en la izquierda: 55, en la derecha: 36
+tipo_registro (118)
+    en la izquierda: 56, en la derecha: 37
+declaracion_campo (119)
+    en la izquierda: 57 58, en la derecha: 56 57
+declaracion_constantes (120)
+    en la izquierda: 59 60, en la derecha: 7 12 13 126
+declaracion_constante_unoomas (121)
+    en la izquierda: 61 62, en la derecha: 60 61
+declaracion_constante (122)
+    en la izquierda: 63, en la derecha: 61 62 99
+valor_constante (123)
+    en la izquierda: 64 65 66 67, en la derecha: 63 68 69 70 71 72
+    73 76
+valor_constante_comas (124)
+    en la izquierda: 68 69, en la derecha: 65 68
+clave_valor (125)
+    en la izquierda: 70 71, en la derecha: 66 70
+campo_valor (126)
+    en la izquierda: 72 73, en la derecha: 67 72
+declaracion_variables (127)
+    en la izquierda: 74 75, en la derecha: 7 12 13 126
+declaracion_variable (128)
+    en la izquierda: 76 77, en la derecha: 75
+declaracion_interfaces (129)
+    en la izquierda: 78, en la derecha: 12
+declaracion_clase (130)
+    en la izquierda: 79 80, en la derecha: 38
+declaracion_clase_mod (131)
+    en la izquierda: 81 82, en la derecha: 79
+declaracion_clase_nomod (132)
+    en la izquierda: 83 84, en la derecha: 80
+declaraciones_publicas (133)
+    en la izquierda: 85 86, en la derecha: 81 82 83 84
+declaraciones_semi (134)
+    en la izquierda: 87 88, en la derecha: 81 82 83 84
+declaraciones_privadas (135)
+    en la izquierda: 89 90, en la derecha: 81 82 83 84
+declaracion_componente_unoomas (136)
+    en la izquierda: 91 92, en la derecha: 85 86 88 90 92
+declaracion_componente (137)
+    en la izquierda: 93 94 95 96 97, en la derecha: 91 92
+declaracion_tipo_anidado (138)
+    en la izquierda: 98, en la derecha: 93
+declaracion_constante_anidada (139)
+    en la izquierda: 99, en la derecha: 94
+declaracion_atributos (140)
+    en la izquierda: 100, en la derecha: 95
+modificadores (141)
+    en la izquierda: 101, en la derecha: 96
+modificador_comas (142)
+    en la izquierda: 102 103, en la derecha: 101 102
+modificador (143)
+    en la izquierda: 104 105 106 107, en la derecha: 102 103
+declaracion_subprograma (144)
+    en la izquierda: 108 109, en la derecha: 13 108
+cabecera_subprograma (145)
+    en la izquierda: 110 111 112 113, en la derecha: 96 97 108 109
+    114 115
+cabecera_subprograma_unoomas (146)
+    en la izquierda: 114 115, en la derecha: 78 114
+cabecera_funcion (147)
+    en la izquierda: 116, en la derecha: 110
+cabecera_procedimiento (148)
+    en la izquierda: 117, en la derecha: 111
+cabecera_constructor (149)
+    en la izquierda: 118, en la derecha: 112
+cabecera_destructor (150)
+    en la izquierda: 119, en la derecha: 113
+declaracion_parametros (151)
+    en la izquierda: 120 121, en la derecha: 116 117 118
+lista_parametros_formales (152)
+    en la izquierda: 122 123, en la derecha: 121 123
+parametros_formales (153)
+    en la izquierda: 124 125, en la derecha: 122 123
+bloque_subprograma (154)
+    en la izquierda: 126, en la derecha: 108 109
+instruccion (155)
+    en la izquierda: 127 128 129 130 131 132 133 134 135 136, en la derecha:
+    9 10
+instruccion_asignacion (156)
+    en la izquierda: 137, en la derecha: 128
+instruccion_salir (157)
+    en la izquierda: 138 139, en la derecha: 129
+instruccion_devolver (158)
+    en la izquierda: 140 141, en la derecha: 130
+instruccion_llamada (159)
+    en la izquierda: 142, en la derecha: 131
+llamada_subprograma (160)
+    en la izquierda: 143, en la derecha: 142 177
+expresion_comas (161)
+    en la izquierda: 144 145, en la derecha: 143 144 168
+instruccion_si (162)
+    en la izquierda: 146 147, en la derecha: 132
+instruccion_casos (163)
+    en la izquierda: 148, en la derecha: 133
+caso (164)
+    en la izquierda: 149 150, en la derecha: 148 149
+entradas (165)
+    en la izquierda: 151, en la derecha: 149 150
+entradas_op (166)
+    en la izquierda: 152 153, en la derecha: 151 153
+entrada (167)
+    en la izquierda: 154 155 156, en la derecha: 151 153
+instruccion_bucle (168)
+    en la izquierda: 157, en la derecha: 134
+clausula_iteracion (169)
+    en la izquierda: 158 159 160 161 162, en la derecha: 157
+instruccion_probar_excepto (170)
+    en la izquierda: 163 164, en la derecha: 135
+clausula_excepcion (171)
+    en la izquierda: 165, en la derecha: 163 164
+instruccion_lanzar (172)
+    en la izquierda: 166, en la derecha: 136
+objeto (173)
+    en la izquierda: 167 168 169, en la derecha: 137 158 168 169 176
+expresion_constante (174)
+    en la izquierda: 170 171 172 173 174, en la derecha: 46 47 175
+expresion_primaria (175)
+    en la izquierda: 175 176 177 178, en la derecha: 179
+expresion (176)
+    en la izquierda: 179, en la derecha: 51 53 64 137 138 140 144 145
+    146 147 148 154 161 162 178
+
+
+estado 0
+
+    0 $accept: . programa $end
+
+    PAQUETE   desplazar e ir al estado 1
+    PROGRAMA  desplazar e ir al estado 2
+
+    programa             ir al estado 3
+    definicion_programa  ir al estado 4
+    definicion_paquete   ir al estado 5
+
+
+estado 1
+
+   11 definicion_paquete: PAQUETE . nombre ';' seccion_cabecera seccion_cuerpo
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 6
+    id_op   ir al estado 7
+
+
+estado 2
+
+    3 definicion_programa: PROGRAMA . nombre ';' bloque_programa
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 8
+    id_op   ir al estado 7
+
+
+estado 3
+
+    0 $accept: programa . $end
+
+    $end  desplazar e ir al estado 9
+
+
+estado 4
+
+    1 programa: definicion_programa .
+
+    $default  reduce usando la regla 1 (programa)
+
+
+estado 5
+
+    2 programa: definicion_paquete .
+
+    $default  reduce usando la regla 2 (programa)
+
+
+estado 6
+
+   11 definicion_paquete: PAQUETE nombre . ';' seccion_cabecera seccion_cuerpo
+
+    ';'  desplazar e ir al estado 10
+
+
+estado 7
+
+    4 nombre: id_op . IDENTIFICADOR
+    6 id_op: id_op . IDENTIFICADOR CUATRO_PTOS
+
+    IDENTIFICADOR  desplazar e ir al estado 11
+
+
+estado 8
+
+    3 definicion_programa: PROGRAMA nombre . ';' bloque_programa
+
+    ';'  desplazar e ir al estado 12
+
+
+estado 9
+
+    0 $accept: programa $end .
+
+    $default  aceptar
+
+
+estado 10
+
+   11 definicion_paquete: PAQUETE nombre ';' . seccion_cabecera seccion_cuerpo
+
+    CABECERA  desplazar e ir al estado 13
+
+    seccion_cabecera  ir al estado 14
+
+
+estado 11
+
+    4 nombre: id_op IDENTIFICADOR .
+    6 id_op: id_op IDENTIFICADOR . CUATRO_PTOS
+
+    CUATRO_PTOS  desplazar e ir al estado 15
+
+    $default  reduce usando la regla 4 (nombre)
+
+
+estado 12
+
+    3 definicion_programa: PROGRAMA nombre ';' . bloque_programa
+
+    CARGA  desplazar e ir al estado 16
+
+    $default  reduce usando la regla 14 (declaracion_cargas)
+
+    bloque_programa     ir al estado 17
+    declaracion_cargas  ir al estado 18
+
+
+estado 13
+
+   12 seccion_cabecera: CABECERA . declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces
+
+    CARGA  desplazar e ir al estado 16
+
+    $default  reduce usando la regla 14 (declaracion_cargas)
+
+    declaracion_cargas  ir al estado 19
+
+
+estado 14
+
+   11 definicion_paquete: PAQUETE nombre ';' seccion_cabecera . seccion_cuerpo
+
+    CUERPO  desplazar e ir al estado 20
+
+    seccion_cuerpo  ir al estado 21
+
+
+estado 15
+
+    6 id_op: id_op IDENTIFICADOR CUATRO_PTOS .
+
+    $default  reduce usando la regla 6 (id_op)
+
+
+estado 16
+
+   15 declaracion_cargas: CARGA . declaracion_carga_unoomas ';'
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                     ir al estado 22
+    id_op                      ir al estado 7
+    declaracion_carga_unoomas  ir al estado 23
+
+
+estado 17
+
+    3 definicion_programa: PROGRAMA nombre ';' bloque_programa .
+
+    $default  reduce usando la regla 3 (definicion_programa)
+
+
+estado 18
+
+    7 bloque_programa: declaracion_cargas . declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
+
+    TIPO  desplazar e ir al estado 24
+
+    $default  reduce usando la regla 24 (declaracion_tipos)
+
+    declaracion_tipos  ir al estado 25
+
+
+estado 19
+
+   12 seccion_cabecera: CABECERA declaracion_cargas . declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces
+
+    TIPO  desplazar e ir al estado 24
+
+    $default  reduce usando la regla 24 (declaracion_tipos)
+
+    declaracion_tipos  ir al estado 26
+
+
+estado 20
+
+   13 seccion_cuerpo: CUERPO . declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma
+
+    TIPO  desplazar e ir al estado 24
+
+    $default  reduce usando la regla 24 (declaracion_tipos)
+
+    declaracion_tipos  ir al estado 27
+
+
+estado 21
+
+   11 definicion_paquete: PAQUETE nombre ';' seccion_cabecera seccion_cuerpo .
+
+    $default  reduce usando la regla 11 (definicion_paquete)
+
+
+estado 22
+
+   16 declaracion_carga_unoomas: nombre . en_path_op nombres_op
+
+    EN  desplazar e ir al estado 28
+
+    $default  reduce usando la regla 18 (en_path_op)
+
+    en_path_op  ir al estado 29
+
+
+estado 23
+
+   15 declaracion_cargas: CARGA declaracion_carga_unoomas . ';'
+   17 declaracion_carga_unoomas: declaracion_carga_unoomas . ',' nombre en_path_op nombres_op
+
+    ';'  desplazar e ir al estado 30
+    ','  desplazar e ir al estado 31
+
+
+estado 24
+
+   25 declaracion_tipos: TIPO . declaracion_tipo
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre            ir al estado 32
+    id_op             ir al estado 7
+    declaracion_tipo  ir al estado 33
+
+
+estado 25
+
+    7 bloque_programa: declaracion_cargas declaracion_tipos . declaracion_constantes declaracion_variables bloque_instrucciones
+
+    CONSTANTE  desplazar e ir al estado 34
+
+    $default  reduce usando la regla 59 (declaracion_constantes)
+
+    declaracion_constantes  ir al estado 35
+
+
+estado 26
+
+   12 seccion_cabecera: CABECERA declaracion_cargas declaracion_tipos . declaracion_constantes declaracion_variables declaracion_interfaces
+
+    CONSTANTE  desplazar e ir al estado 34
+
+    $default  reduce usando la regla 59 (declaracion_constantes)
+
+    declaracion_constantes  ir al estado 36
+
+
+estado 27
+
+   13 seccion_cuerpo: CUERPO declaracion_tipos . declaracion_constantes declaracion_variables declaracion_subprograma
+
+    CONSTANTE  desplazar e ir al estado 34
+
+    $default  reduce usando la regla 59 (declaracion_constantes)
+
+    declaracion_constantes  ir al estado 37
+
+
+estado 28
+
+   19 en_path_op: EN . PATH
+
+    PATH  desplazar e ir al estado 38
+
+
+estado 29
+
+   16 declaracion_carga_unoomas: nombre en_path_op . nombres_op
+
+    '('  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 20 (nombres_op)
+
+    nombres_op  ir al estado 40
+
+
+estado 30
+
+   15 declaracion_cargas: CARGA declaracion_carga_unoomas ';' .
+
+    $default  reduce usando la regla 15 (declaracion_cargas)
+
+
+estado 31
+
+   17 declaracion_carga_unoomas: declaracion_carga_unoomas ',' . nombre en_path_op nombres_op
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 41
+    id_op   ir al estado 7
+
+
+estado 32
+
+   28 declaracion_tipo: nombre . '=' tipo_no_estructurado_o_nombre_tipo ';'
+   29                 | nombre . '=' tipo_estructurado
+
+    '='  desplazar e ir al estado 42
+
+
+estado 33
+
+   25 declaracion_tipos: TIPO declaracion_tipo .
+   26 declaracion_tipo: declaracion_tipo . nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
+   27                 | declaracion_tipo . nombre '=' tipo_estructurado
+
+    IDENTIFICADOR  reduce usando la regla 5 (id_op)
+    $default       reduce usando la regla 25 (declaracion_tipos)
+
+    nombre  ir al estado 43
+    id_op   ir al estado 7
+
+
+estado 34
+
+   60 declaracion_constantes: CONSTANTE . declaracion_constante_unoomas
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                         ir al estado 44
+    id_op                          ir al estado 7
+    declaracion_constante_unoomas  ir al estado 45
+    declaracion_constante          ir al estado 46
+
+
+estado 35
+
+    7 bloque_programa: declaracion_cargas declaracion_tipos declaracion_constantes . declaracion_variables bloque_instrucciones
+
+    VARIABLE  desplazar e ir al estado 47
+
+    $default  reduce usando la regla 74 (declaracion_variables)
+
+    declaracion_variables  ir al estado 48
+
+
+estado 36
+
+   12 seccion_cabecera: CABECERA declaracion_cargas declaracion_tipos declaracion_constantes . declaracion_variables declaracion_interfaces
+
+    VARIABLE  desplazar e ir al estado 47
+
+    $default  reduce usando la regla 74 (declaracion_variables)
+
+    declaracion_variables  ir al estado 49
+
+
+estado 37
+
+   13 seccion_cuerpo: CUERPO declaracion_tipos declaracion_constantes . declaracion_variables declaracion_subprograma
+
+    VARIABLE  desplazar e ir al estado 47
+
+    $default  reduce usando la regla 74 (declaracion_variables)
+
+    declaracion_variables  ir al estado 50
+
+
+estado 38
+
+   19 en_path_op: EN PATH .
+
+    $default  reduce usando la regla 19 (en_path_op)
+
+
+estado 39
+
+   21 nombres_op: '(' . nombres_comas ')'
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre         ir al estado 51
+    id_op          ir al estado 7
+    nombres_comas  ir al estado 52
+
+
+estado 40
+
+   16 declaracion_carga_unoomas: nombre en_path_op nombres_op .
+
+    $default  reduce usando la regla 16 (declaracion_carga_unoomas)
+
+
+estado 41
+
+   17 declaracion_carga_unoomas: declaracion_carga_unoomas ',' nombre . en_path_op nombres_op
+
+    EN  desplazar e ir al estado 28
+
+    $default  reduce usando la regla 18 (en_path_op)
+
+    en_path_op  ir al estado 53
+
+
+estado 42
+
+   28 declaracion_tipo: nombre '=' . tipo_no_estructurado_o_nombre_tipo ';'
+   29                 | nombre '=' . tipo_estructurado
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CLASE     desplazar e ir al estado 57
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    REGISTRO  desplazar e ir al estado 63
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 66
+    tipo_estructurado                   ir al estado 67
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+    tipo_registro                       ir al estado 74
+    declaracion_clase                   ir al estado 75
+    declaracion_clase_mod               ir al estado 76
+    declaracion_clase_nomod             ir al estado 77
+
+
+estado 43
+
+   26 declaracion_tipo: declaracion_tipo nombre . '=' tipo_no_estructurado_o_nombre_tipo ';'
+   27                 | declaracion_tipo nombre . '=' tipo_estructurado
+
+    '='  desplazar e ir al estado 78
+
+
+estado 44
+
+   63 declaracion_constante: nombre . ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+
+    ';'  desplazar e ir al estado 79
+
+
+estado 45
+
+   60 declaracion_constantes: CONSTANTE declaracion_constante_unoomas .
+   61 declaracion_constante_unoomas: declaracion_constante_unoomas . declaracion_constante
+
+    IDENTIFICADOR  reduce usando la regla 5 (id_op)
+    $default       reduce usando la regla 60 (declaracion_constantes)
+
+    nombre                 ir al estado 44
+    id_op                  ir al estado 7
+    declaracion_constante  ir al estado 80
+
+
+estado 46
+
+   62 declaracion_constante_unoomas: declaracion_constante .
+
+    $default  reduce usando la regla 62 (declaracion_constante_unoomas)
+
+
+estado 47
+
+   75 declaracion_variables: VARIABLE . declaracion_variable
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                ir al estado 51
+    id_op                 ir al estado 7
+    nombres_comas         ir al estado 81
+    declaracion_variable  ir al estado 82
+
+
+estado 48
+
+    7 bloque_programa: declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 84
+
+
+estado 49
+
+   12 seccion_cabecera: CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables . declaracion_interfaces
+
+    INTERFAZ  desplazar e ir al estado 85
+
+    declaracion_interfaces  ir al estado 86
+
+
+estado 50
+
+   13 seccion_cuerpo: CUERPO declaracion_tipos declaracion_constantes declaracion_variables . declaracion_subprograma
+
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+
+    declaracion_subprograma  ir al estado 91
+    cabecera_subprograma     ir al estado 92
+    cabecera_funcion         ir al estado 93
+    cabecera_procedimiento   ir al estado 94
+    cabecera_constructor     ir al estado 95
+    cabecera_destructor      ir al estado 96
+
+
+estado 51
+
+   23 nombres_comas: nombre .
+
+    $default  reduce usando la regla 23 (nombres_comas)
+
+
+estado 52
+
+   21 nombres_op: '(' nombres_comas . ')'
+   22 nombres_comas: nombres_comas . ',' nombre
+
+    ','  desplazar e ir al estado 97
+    ')'  desplazar e ir al estado 98
+
+
+estado 53
+
+   17 declaracion_carga_unoomas: declaracion_carga_unoomas ',' nombre en_path_op . nombres_op
+
+    '('  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 20 (nombres_op)
+
+    nombres_op  ir al estado 99
+
+
+estado 54
+
+   41 tipo_escalar: BOOLEANO .
+
+    $default  reduce usando la regla 41 (tipo_escalar)
+
+
+estado 55
+
+   43 tipo_escalar: CADENA .
+
+    $default  reduce usando la regla 43 (tipo_escalar)
+
+
+estado 56
+
+   42 tipo_escalar: CARACTER .
+
+    $default  reduce usando la regla 42 (tipo_escalar)
+
+
+estado 57
+
+   81 declaracion_clase_mod: CLASE . FINAL '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   82                      | CLASE . FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   83 declaracion_clase_nomod: CLASE . '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   84                        | CLASE . '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    FINAL  desplazar e ir al estado 100
+    '('    desplazar e ir al estado 101
+
+
+estado 58
+
+   55 tipo_conjunto: CONJUNTO . DE tipo_no_estructurado_o_nombre_tipo
+
+    DE  desplazar e ir al estado 102
+
+
+estado 59
+
+   39 tipo_escalar: ENTERO .
+
+    $default  reduce usando la regla 39 (tipo_escalar)
+
+
+estado 60
+
+   44 tipo_fichero: FICHERO .
+
+    $default  reduce usando la regla 44 (tipo_fichero)
+
+
+estado 61
+
+   48 tipo_lista: LISTA . rango_lista DE tipo_no_estructurado_o_nombre_tipo
+   54 tipo_lista_asociativa: LISTA . ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo
+
+    ASOCIATIVA    desplazar e ir al estado 103
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    rango_lista          ir al estado 111
+    rango                ir al estado 112
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 117
+
+
+estado 62
+
+   40 tipo_escalar: REAL .
+
+    $default  reduce usando la regla 40 (tipo_escalar)
+
+
+estado 63
+
+   56 tipo_registro: REGISTRO . '{' declaracion_campo '}'
+
+    '{'  desplazar e ir al estado 118
+
+
+estado 64
+
+   45 tipo_enumerado: '(' . expresion_constante_unoomas ')'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+
+    expresion_constante_unoomas  ir al estado 119
+    expresion_constante          ir al estado 120
+
+
+estado 65
+
+   30 tipo_no_estructurado_o_nombre_tipo: nombre .
+
+    $default  reduce usando la regla 30 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 66
+
+   28 declaracion_tipo: nombre '=' tipo_no_estructurado_o_nombre_tipo . ';'
+
+    ';'  desplazar e ir al estado 121
+
+
+estado 67
+
+   29 declaracion_tipo: nombre '=' tipo_estructurado .
+
+    $default  reduce usando la regla 29 (declaracion_tipo)
+
+
+estado 68
+
+   31 tipo_no_estructurado_o_nombre_tipo: tipo_escalar .
+
+    $default  reduce usando la regla 31 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 69
+
+   32 tipo_no_estructurado_o_nombre_tipo: tipo_fichero .
+
+    $default  reduce usando la regla 32 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 70
+
+   33 tipo_no_estructurado_o_nombre_tipo: tipo_enumerado .
+
+    $default  reduce usando la regla 33 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 71
+
+   34 tipo_no_estructurado_o_nombre_tipo: tipo_lista .
+
+    $default  reduce usando la regla 34 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 72
+
+   35 tipo_no_estructurado_o_nombre_tipo: tipo_lista_asociativa .
+
+    $default  reduce usando la regla 35 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 73
+
+   36 tipo_no_estructurado_o_nombre_tipo: tipo_conjunto .
+
+    $default  reduce usando la regla 36 (tipo_no_estructurado_o_nombre_tipo)
+
+
+estado 74
+
+   37 tipo_estructurado: tipo_registro .
+
+    $default  reduce usando la regla 37 (tipo_estructurado)
+
+
+estado 75
+
+   38 tipo_estructurado: declaracion_clase .
+
+    $default  reduce usando la regla 38 (tipo_estructurado)
+
+
+estado 76
+
+   79 declaracion_clase: declaracion_clase_mod .
+
+    $default  reduce usando la regla 79 (declaracion_clase)
+
+
+estado 77
+
+   80 declaracion_clase: declaracion_clase_nomod .
+
+    $default  reduce usando la regla 80 (declaracion_clase)
+
+
+estado 78
+
+   26 declaracion_tipo: declaracion_tipo nombre '=' . tipo_no_estructurado_o_nombre_tipo ';'
+   27                 | declaracion_tipo nombre '=' . tipo_estructurado
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CLASE     desplazar e ir al estado 57
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    REGISTRO  desplazar e ir al estado 63
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 122
+    tipo_estructurado                   ir al estado 123
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+    tipo_registro                       ir al estado 74
+    declaracion_clase                   ir al estado 75
+    declaracion_clase_mod               ir al estado 76
+    declaracion_clase_nomod             ir al estado 77
+
+
+estado 79
+
+   63 declaracion_constante: nombre ';' . tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 124
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 80
+
+   61 declaracion_constante_unoomas: declaracion_constante_unoomas declaracion_constante .
+
+    $default  reduce usando la regla 61 (declaracion_constante_unoomas)
+
+
+estado 81
+
+   22 nombres_comas: nombres_comas . ',' nombre
+   76 declaracion_variable: nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
+   77                     | nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+    ','  desplazar e ir al estado 97
+    ':'  desplazar e ir al estado 125
+
+
+estado 82
+
+   75 declaracion_variables: VARIABLE declaracion_variable .
+
+    $default  reduce usando la regla 75 (declaracion_variables)
+
+
+estado 83
+
+    8 bloque_instrucciones: '{' . instruccion_unoomas '}'
+
+    DEVOLVER  desplazar e ir al estado 126
+    EN        desplazar e ir al estado 127
+    LANZAR    desplazar e ir al estado 128
+    MIENTRAS  desplazar e ir al estado 129
+    PARA      desplazar e ir al estado 130
+    PROBAR    desplazar e ir al estado 131
+    REPITE    desplazar e ir al estado 132
+    SALIR     desplazar e ir al estado 133
+    SI        desplazar e ir al estado 134
+    ';'       desplazar e ir al estado 135
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                      ir al estado 110
+    id_op                       ir al estado 7
+    instruccion_unoomas         ir al estado 136
+    instruccion                 ir al estado 137
+    instruccion_asignacion      ir al estado 138
+    instruccion_salir           ir al estado 139
+    instruccion_devolver        ir al estado 140
+    instruccion_llamada         ir al estado 141
+    llamada_subprograma         ir al estado 142
+    instruccion_si              ir al estado 143
+    instruccion_casos           ir al estado 144
+    instruccion_bucle           ir al estado 145
+    clausula_iteracion          ir al estado 146
+    instruccion_probar_excepto  ir al estado 147
+    instruccion_lanzar          ir al estado 148
+    objeto                      ir al estado 149
+
+
+estado 84
+
+    7 bloque_programa: declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones .
+
+    $default  reduce usando la regla 7 (bloque_programa)
+
+
+estado 85
+
+   78 declaracion_interfaces: INTERFAZ . cabecera_subprograma_unoomas
+
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+
+    cabecera_subprograma          ir al estado 150
+    cabecera_subprograma_unoomas  ir al estado 151
+    cabecera_funcion              ir al estado 93
+    cabecera_procedimiento        ir al estado 94
+    cabecera_constructor          ir al estado 95
+    cabecera_destructor           ir al estado 96
+
+
+estado 86
+
+   12 seccion_cabecera: CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces .
+
+    $default  reduce usando la regla 12 (seccion_cabecera)
+
+
+estado 87
+
+  118 cabecera_constructor: CONSTRUCTOR . nombre declaracion_parametros
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 152
+    id_op   ir al estado 7
+
+
+estado 88
+
+  119 cabecera_destructor: DESTRUCTOR . nombre
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 153
+    id_op   ir al estado 7
+
+
+estado 89
+
+  116 cabecera_funcion: FUNCION . nombre declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 154
+    id_op   ir al estado 7
+
+
+estado 90
+
+  117 cabecera_procedimiento: PROCEDIMIENTO . nombre declaracion_parametros
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 155
+    id_op   ir al estado 7
+
+
+estado 91
+
+   13 seccion_cuerpo: CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma .
+  108 declaracion_subprograma: declaracion_subprograma . cabecera_subprograma bloque_subprograma
+
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 13 (seccion_cuerpo)
+
+    cabecera_subprograma    ir al estado 156
+    cabecera_funcion        ir al estado 93
+    cabecera_procedimiento  ir al estado 94
+    cabecera_constructor    ir al estado 95
+    cabecera_destructor     ir al estado 96
+
+
+estado 92
+
+  109 declaracion_subprograma: cabecera_subprograma . bloque_subprograma
+
+    TIPO  desplazar e ir al estado 24
+
+    $default  reduce usando la regla 24 (declaracion_tipos)
+
+    declaracion_tipos   ir al estado 157
+    bloque_subprograma  ir al estado 158
+
+
+estado 93
+
+  110 cabecera_subprograma: cabecera_funcion .
+
+    $default  reduce usando la regla 110 (cabecera_subprograma)
+
+
+estado 94
+
+  111 cabecera_subprograma: cabecera_procedimiento .
+
+    $default  reduce usando la regla 111 (cabecera_subprograma)
+
+
+estado 95
+
+  112 cabecera_subprograma: cabecera_constructor .
+
+    $default  reduce usando la regla 112 (cabecera_subprograma)
+
+
+estado 96
+
+  113 cabecera_subprograma: cabecera_destructor .
+
+    $default  reduce usando la regla 113 (cabecera_subprograma)
+
+
+estado 97
+
+   22 nombres_comas: nombres_comas ',' . nombre
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 159
+    id_op   ir al estado 7
+
+
+estado 98
+
+   21 nombres_op: '(' nombres_comas ')' .
+
+    $default  reduce usando la regla 21 (nombres_op)
+
+
+estado 99
+
+   17 declaracion_carga_unoomas: declaracion_carga_unoomas ',' nombre en_path_op nombres_op .
+
+    $default  reduce usando la regla 17 (declaracion_carga_unoomas)
+
+
+estado 100
+
+   81 declaracion_clase_mod: CLASE FINAL . '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   82                      | CLASE FINAL . '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    '('  desplazar e ir al estado 160
+
+
+estado 101
+
+   83 declaracion_clase_nomod: CLASE '(' . nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   84                        | CLASE '(' . ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    ')'  desplazar e ir al estado 161
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre         ir al estado 51
+    id_op          ir al estado 7
+    nombres_comas  ir al estado 162
+
+
+estado 102
+
+   55 tipo_conjunto: CONJUNTO DE . tipo_no_estructurado_o_nombre_tipo
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 163
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 103
+
+   54 tipo_lista_asociativa: LISTA ASOCIATIVA . DE tipo_no_estructurado_o_nombre_tipo
+
+    DE  desplazar e ir al estado 164
+
+
+estado 104
+
+  174 expresion_constante: CTC_BOOLEANA .
+
+    $default  reduce usando la regla 174 (expresion_constante)
+
+
+estado 105
+
+  172 expresion_constante: CTC_CADENA .
+
+    $default  reduce usando la regla 172 (expresion_constante)
+
+
+estado 106
+
+  173 expresion_constante: CTC_CARACTER .
+
+    $default  reduce usando la regla 173 (expresion_constante)
+
+
+estado 107
+
+  170 expresion_constante: CTC_ENTERA .
+
+    $default  reduce usando la regla 170 (expresion_constante)
+
+
+estado 108
+
+  171 expresion_constante: CTC_REAL .
+
+    $default  reduce usando la regla 171 (expresion_constante)
+
+
+estado 109
+
+  178 expresion_primaria: '(' . expresion ')'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 165
+
+
+estado 110
+
+  143 llamada_subprograma: nombre . '(' expresion_comas ')' nombre '(' ')'
+  167 objeto: nombre .
+
+    '('  desplazar e ir al estado 166
+
+    $default  reduce usando la regla 167 (objeto)
+
+
+estado 111
+
+   48 tipo_lista: LISTA rango_lista . DE tipo_no_estructurado_o_nombre_tipo
+   49 rango_lista: rango_lista . ',' rango
+
+    DE   desplazar e ir al estado 167
+    ','  desplazar e ir al estado 168
+
+
+estado 112
+
+   50 rango_lista: rango .
+
+    $default  reduce usando la regla 50 (rango_lista)
+
+
+estado 113
+
+  177 expresion_primaria: llamada_subprograma .
+
+    $default  reduce usando la regla 177 (expresion_primaria)
+
+
+estado 114
+
+  168 objeto: objeto . '[' expresion_comas ']'
+  169       | objeto . '.' IDENTIFICADOR
+  176 expresion_primaria: objeto .
+
+    '['  desplazar e ir al estado 169
+    '.'  desplazar e ir al estado 170
+
+    $default  reduce usando la regla 176 (expresion_primaria)
+
+
+estado 115
+
+  175 expresion_primaria: expresion_constante .
+
+    $default  reduce usando la regla 175 (expresion_primaria)
+
+
+estado 116
+
+  179 expresion: expresion_primaria .
+
+    $default  reduce usando la regla 179 (expresion)
+
+
+estado 117
+
+   51 rango: expresion . DOS_PTOS expresion expresion_rango_op
+
+    DOS_PTOS  desplazar e ir al estado 171
+
+
+estado 118
+
+   56 tipo_registro: REGISTRO '{' . declaracion_campo '}'
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre             ir al estado 51
+    id_op              ir al estado 7
+    nombres_comas      ir al estado 172
+    declaracion_campo  ir al estado 173
+
+
+estado 119
+
+   45 tipo_enumerado: '(' expresion_constante_unoomas . ')'
+   47 expresion_constante_unoomas: expresion_constante_unoomas . ',' expresion_constante
+
+    ','  desplazar e ir al estado 174
+    ')'  desplazar e ir al estado 175
+
+
+estado 120
+
+   46 expresion_constante_unoomas: expresion_constante .
+
+    $default  reduce usando la regla 46 (expresion_constante_unoomas)
+
+
+estado 121
+
+   28 declaracion_tipo: nombre '=' tipo_no_estructurado_o_nombre_tipo ';' .
+
+    $default  reduce usando la regla 28 (declaracion_tipo)
+
+
+estado 122
+
+   26 declaracion_tipo: declaracion_tipo nombre '=' tipo_no_estructurado_o_nombre_tipo . ';'
+
+    ';'  desplazar e ir al estado 176
+
+
+estado 123
+
+   27 declaracion_tipo: declaracion_tipo nombre '=' tipo_estructurado .
+
+    $default  reduce usando la regla 27 (declaracion_tipo)
+
+
+estado 124
+
+   63 declaracion_constante: nombre ';' tipo_no_estructurado_o_nombre_tipo . '=' valor_constante
+
+    '='  desplazar e ir al estado 177
+
+
+estado 125
+
+   76 declaracion_variable: nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
+   77                     | nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo ';'
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 178
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 126
+
+  140 instruccion_devolver: DEVOLVER . expresion ';'
+  141                     | DEVOLVER . ';'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    ';'           desplazar e ir al estado 179
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 180
+
+
+estado 127
+
+  148 instruccion_casos: EN . CASO expresion SEA caso ';'
+
+    CASO  desplazar e ir al estado 181
+
+
+estado 128
+
+  166 instruccion_lanzar: LANZAR . nombre ';'
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 182
+    id_op   ir al estado 7
+
+
+estado 129
+
+  161 clausula_iteracion: MIENTRAS . expresion
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 183
+
+
+estado 130
+
+  158 clausula_iteracion: PARA . nombre EN objeto
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 184
+    id_op   ir al estado 7
+
+
+estado 131
+
+  163 instruccion_probar_excepto: PROBAR . bloque_instrucciones EXCEPTO clausula_excepcion FINALMENTE bloque_instrucciones
+  164                           | PROBAR . bloque_instrucciones EXCEPTO clausula_excepcion
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 185
+
+
+estado 132
+
+  159 clausula_iteracion: REPITE . ELEMENTO nombre EN rango DESCENDENTE
+  160                   | REPITE . ELEMENTO nombre EN rango
+  162                   | REPITE . HASTA expresion
+
+    ELEMENTO  desplazar e ir al estado 186
+    HASTA     desplazar e ir al estado 187
+
+
+estado 133
+
+  138 instruccion_salir: SALIR . SI expresion ';'
+  139                  | SALIR . ';'
+
+    SI   desplazar e ir al estado 188
+    ';'  desplazar e ir al estado 189
+
+
+estado 134
+
+  146 instruccion_si: SI . expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones
+  147               | SI . expresion ENTONCES bloque_instrucciones
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 190
+
+
+estado 135
+
+  127 instruccion: ';' .
+
+    $default  reduce usando la regla 127 (instruccion)
+
+
+estado 136
+
+    8 bloque_instrucciones: '{' instruccion_unoomas . '}'
+    9 instruccion_unoomas: instruccion_unoomas . instruccion
+
+    DEVOLVER  desplazar e ir al estado 126
+    EN        desplazar e ir al estado 127
+    LANZAR    desplazar e ir al estado 128
+    MIENTRAS  desplazar e ir al estado 129
+    PARA      desplazar e ir al estado 130
+    PROBAR    desplazar e ir al estado 131
+    REPITE    desplazar e ir al estado 132
+    SALIR     desplazar e ir al estado 133
+    SI        desplazar e ir al estado 134
+    ';'       desplazar e ir al estado 135
+    '}'       desplazar e ir al estado 191
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                      ir al estado 110
+    id_op                       ir al estado 7
+    instruccion                 ir al estado 192
+    instruccion_asignacion      ir al estado 138
+    instruccion_salir           ir al estado 139
+    instruccion_devolver        ir al estado 140
+    instruccion_llamada         ir al estado 141
+    llamada_subprograma         ir al estado 142
+    instruccion_si              ir al estado 143
+    instruccion_casos           ir al estado 144
+    instruccion_bucle           ir al estado 145
+    clausula_iteracion          ir al estado 146
+    instruccion_probar_excepto  ir al estado 147
+    instruccion_lanzar          ir al estado 148
+    objeto                      ir al estado 149
+
+
+estado 137
+
+   10 instruccion_unoomas: instruccion .
+
+    $default  reduce usando la regla 10 (instruccion_unoomas)
+
+
+estado 138
+
+  128 instruccion: instruccion_asignacion .
+
+    $default  reduce usando la regla 128 (instruccion)
+
+
+estado 139
+
+  129 instruccion: instruccion_salir .
+
+    $default  reduce usando la regla 129 (instruccion)
+
+
+estado 140
+
+  130 instruccion: instruccion_devolver .
+
+    $default  reduce usando la regla 130 (instruccion)
+
+
+estado 141
+
+  131 instruccion: instruccion_llamada .
+
+    $default  reduce usando la regla 131 (instruccion)
+
+
+estado 142
+
+  142 instruccion_llamada: llamada_subprograma . ';'
+
+    ';'  desplazar e ir al estado 193
+
+
+estado 143
+
+  132 instruccion: instruccion_si .
+
+    $default  reduce usando la regla 132 (instruccion)
+
+
+estado 144
+
+  133 instruccion: instruccion_casos .
+
+    $default  reduce usando la regla 133 (instruccion)
+
+
+estado 145
+
+  134 instruccion: instruccion_bucle .
+
+    $default  reduce usando la regla 134 (instruccion)
+
+
+estado 146
+
+  157 instruccion_bucle: clausula_iteracion . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 194
+
+
+estado 147
+
+  135 instruccion: instruccion_probar_excepto .
+
+    $default  reduce usando la regla 135 (instruccion)
+
+
+estado 148
+
+  136 instruccion: instruccion_lanzar .
+
+    $default  reduce usando la regla 136 (instruccion)
+
+
+estado 149
+
+  137 instruccion_asignacion: objeto . '=' expresion ';'
+  168 objeto: objeto . '[' expresion_comas ']'
+  169       | objeto . '.' IDENTIFICADOR
+
+    '='  desplazar e ir al estado 195
+    '['  desplazar e ir al estado 169
+    '.'  desplazar e ir al estado 170
+
+
+estado 150
+
+  115 cabecera_subprograma_unoomas: cabecera_subprograma .
+
+    $default  reduce usando la regla 115 (cabecera_subprograma_unoomas)
+
+
+estado 151
+
+   78 declaracion_interfaces: INTERFAZ cabecera_subprograma_unoomas .
+  114 cabecera_subprograma_unoomas: cabecera_subprograma_unoomas . cabecera_subprograma
+
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 78 (declaracion_interfaces)
+
+    cabecera_subprograma    ir al estado 196
+    cabecera_funcion        ir al estado 93
+    cabecera_procedimiento  ir al estado 94
+    cabecera_constructor    ir al estado 95
+    cabecera_destructor     ir al estado 96
+
+
+estado 152
+
+  118 cabecera_constructor: CONSTRUCTOR nombre . declaracion_parametros
+
+    '('  desplazar e ir al estado 197
+
+    $default  reduce usando la regla 120 (declaracion_parametros)
+
+    declaracion_parametros  ir al estado 198
+
+
+estado 153
+
+  119 cabecera_destructor: DESTRUCTOR nombre .
+
+    $default  reduce usando la regla 119 (cabecera_destructor)
+
+
+estado 154
+
+  116 cabecera_funcion: FUNCION nombre . declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
+
+    '('  desplazar e ir al estado 197
+
+    $default  reduce usando la regla 120 (declaracion_parametros)
+
+    declaracion_parametros  ir al estado 199
+
+
+estado 155
+
+  117 cabecera_procedimiento: PROCEDIMIENTO nombre . declaracion_parametros
+
+    '('  desplazar e ir al estado 197
+
+    $default  reduce usando la regla 120 (declaracion_parametros)
+
+    declaracion_parametros  ir al estado 200
+
+
+estado 156
+
+  108 declaracion_subprograma: declaracion_subprograma cabecera_subprograma . bloque_subprograma
+
+    TIPO  desplazar e ir al estado 24
+
+    $default  reduce usando la regla 24 (declaracion_tipos)
+
+    declaracion_tipos   ir al estado 157
+    bloque_subprograma  ir al estado 201
+
+
+estado 157
+
+  126 bloque_subprograma: declaracion_tipos . declaracion_constantes declaracion_variables bloque_instrucciones
+
+    CONSTANTE  desplazar e ir al estado 34
+
+    $default  reduce usando la regla 59 (declaracion_constantes)
+
+    declaracion_constantes  ir al estado 202
+
+
+estado 158
+
+  109 declaracion_subprograma: cabecera_subprograma bloque_subprograma .
+
+    $default  reduce usando la regla 109 (declaracion_subprograma)
+
+
+estado 159
+
+   22 nombres_comas: nombres_comas ',' nombre .
+
+    $default  reduce usando la regla 22 (nombres_comas)
+
+
+estado 160
+
+   81 declaracion_clase_mod: CLASE FINAL '(' . ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+   82                      | CLASE FINAL '(' . nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    ')'  desplazar e ir al estado 203
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre         ir al estado 51
+    id_op          ir al estado 7
+    nombres_comas  ir al estado 204
+
+
+estado 161
+
+   84 declaracion_clase_nomod: CLASE '(' ')' . '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    '{'  desplazar e ir al estado 205
+
+
+estado 162
+
+   22 nombres_comas: nombres_comas . ',' nombre
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas . ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    ','  desplazar e ir al estado 97
+    ')'  desplazar e ir al estado 206
+
+
+estado 163
+
+   55 tipo_conjunto: CONJUNTO DE tipo_no_estructurado_o_nombre_tipo .
+
+    $default  reduce usando la regla 55 (tipo_conjunto)
+
+
+estado 164
+
+   54 tipo_lista_asociativa: LISTA ASOCIATIVA DE . tipo_no_estructurado_o_nombre_tipo
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 207
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 165
+
+  178 expresion_primaria: '(' expresion . ')'
+
+    ')'  desplazar e ir al estado 208
+
+
+estado 166
+
+  143 llamada_subprograma: nombre '(' . expresion_comas ')' nombre '(' ')'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    expresion_comas      ir al estado 209
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 210
+
+
+estado 167
+
+   48 tipo_lista: LISTA rango_lista DE . tipo_no_estructurado_o_nombre_tipo
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 211
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 168
+
+   49 rango_lista: rango_lista ',' . rango
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    rango                ir al estado 212
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 117
+
+
+estado 169
+
+  168 objeto: objeto '[' . expresion_comas ']'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    expresion_comas      ir al estado 213
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 210
+
+
+estado 170
+
+  169 objeto: objeto '.' . IDENTIFICADOR
+
+    IDENTIFICADOR  desplazar e ir al estado 214
+
+
+estado 171
+
+   51 rango: expresion DOS_PTOS . expresion expresion_rango_op
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 215
+
+
+estado 172
+
+   22 nombres_comas: nombres_comas . ',' nombre
+   58 declaracion_campo: nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+    ','  desplazar e ir al estado 97
+    ':'  desplazar e ir al estado 216
+
+
+estado 173
+
+   56 tipo_registro: REGISTRO '{' declaracion_campo . '}'
+   57 declaracion_campo: declaracion_campo . nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+    '}'  desplazar e ir al estado 217
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre         ir al estado 51
+    id_op          ir al estado 7
+    nombres_comas  ir al estado 218
+
+
+estado 174
+
+   47 expresion_constante_unoomas: expresion_constante_unoomas ',' . expresion_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+
+    expresion_constante  ir al estado 219
+
+
+estado 175
+
+   45 tipo_enumerado: '(' expresion_constante_unoomas ')' .
+
+    $default  reduce usando la regla 45 (tipo_enumerado)
+
+
+estado 176
+
+   26 declaracion_tipo: declaracion_tipo nombre '=' tipo_no_estructurado_o_nombre_tipo ';' .
+
+    $default  reduce usando la regla 26 (declaracion_tipo)
+
+
+estado 177
+
+   63 declaracion_constante: nombre ';' tipo_no_estructurado_o_nombre_tipo '=' . valor_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 221
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 178
+
+   76 declaracion_variable: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo . '=' valor_constante ';'
+   77                     | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo . ';'
+
+    ';'  desplazar e ir al estado 223
+    '='  desplazar e ir al estado 224
+
+
+estado 179
+
+  141 instruccion_devolver: DEVOLVER ';' .
+
+    $default  reduce usando la regla 141 (instruccion_devolver)
+
+
+estado 180
+
+  140 instruccion_devolver: DEVOLVER expresion . ';'
+
+    ';'  desplazar e ir al estado 225
+
+
+estado 181
+
+  148 instruccion_casos: EN CASO . expresion SEA caso ';'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 226
+
+
+estado 182
+
+  166 instruccion_lanzar: LANZAR nombre . ';'
+
+    ';'  desplazar e ir al estado 227
+
+
+estado 183
+
+  161 clausula_iteracion: MIENTRAS expresion .
+
+    $default  reduce usando la regla 161 (clausula_iteracion)
+
+
+estado 184
+
+  158 clausula_iteracion: PARA nombre . EN objeto
+
+    EN  desplazar e ir al estado 228
+
+
+estado 185
+
+  163 instruccion_probar_excepto: PROBAR bloque_instrucciones . EXCEPTO clausula_excepcion FINALMENTE bloque_instrucciones
+  164                           | PROBAR bloque_instrucciones . EXCEPTO clausula_excepcion
+
+    EXCEPTO  desplazar e ir al estado 229
+
+
+estado 186
+
+  159 clausula_iteracion: REPITE ELEMENTO . nombre EN rango DESCENDENTE
+  160                   | REPITE ELEMENTO . nombre EN rango
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 230
+    id_op   ir al estado 7
+
+
+estado 187
+
+  162 clausula_iteracion: REPITE HASTA . expresion
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 231
+
+
+estado 188
+
+  138 instruccion_salir: SALIR SI . expresion ';'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 232
+
+
+estado 189
+
+  139 instruccion_salir: SALIR ';' .
+
+    $default  reduce usando la regla 139 (instruccion_salir)
+
+
+estado 190
+
+  146 instruccion_si: SI expresion . ENTONCES bloque_instrucciones SINO bloque_instrucciones
+  147               | SI expresion . ENTONCES bloque_instrucciones
+
+    ENTONCES  desplazar e ir al estado 233
+
+
+estado 191
+
+    8 bloque_instrucciones: '{' instruccion_unoomas '}' .
+
+    $default  reduce usando la regla 8 (bloque_instrucciones)
+
+
+estado 192
+
+    9 instruccion_unoomas: instruccion_unoomas instruccion .
+
+    $default  reduce usando la regla 9 (instruccion_unoomas)
+
+
+estado 193
+
+  142 instruccion_llamada: llamada_subprograma ';' .
+
+    $default  reduce usando la regla 142 (instruccion_llamada)
+
+
+estado 194
+
+  157 instruccion_bucle: clausula_iteracion bloque_instrucciones .
+
+    $default  reduce usando la regla 157 (instruccion_bucle)
+
+
+estado 195
+
+  137 instruccion_asignacion: objeto '=' . expresion ';'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 234
+
+
+estado 196
+
+  114 cabecera_subprograma_unoomas: cabecera_subprograma_unoomas cabecera_subprograma .
+
+    $default  reduce usando la regla 114 (cabecera_subprograma_unoomas)
+
+
+estado 197
+
+  121 declaracion_parametros: '(' . lista_parametros_formales ')'
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                     ir al estado 51
+    id_op                      ir al estado 7
+    nombres_comas              ir al estado 235
+    lista_parametros_formales  ir al estado 236
+    parametros_formales        ir al estado 237
+
+
+estado 198
+
+  118 cabecera_constructor: CONSTRUCTOR nombre declaracion_parametros .
+
+    $default  reduce usando la regla 118 (cabecera_constructor)
+
+
+estado 199
+
+  116 cabecera_funcion: FUNCION nombre declaracion_parametros . FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
+
+    FLECHA_DOBLE  desplazar e ir al estado 238
+
+
+estado 200
+
+  117 cabecera_procedimiento: PROCEDIMIENTO nombre declaracion_parametros .
+
+    $default  reduce usando la regla 117 (cabecera_procedimiento)
+
+
+estado 201
+
+  108 declaracion_subprograma: declaracion_subprograma cabecera_subprograma bloque_subprograma .
+
+    $default  reduce usando la regla 108 (declaracion_subprograma)
+
+
+estado 202
+
+  126 bloque_subprograma: declaracion_tipos declaracion_constantes . declaracion_variables bloque_instrucciones
+
+    VARIABLE  desplazar e ir al estado 47
+
+    $default  reduce usando la regla 74 (declaracion_variables)
+
+    declaracion_variables  ir al estado 239
+
+
+estado 203
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' . '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    '{'  desplazar e ir al estado 240
+
+
+estado 204
+
+   22 nombres_comas: nombres_comas . ',' nombre
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas . ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    ','  desplazar e ir al estado 97
+    ')'  desplazar e ir al estado 241
+
+
+estado 205
+
+   84 declaracion_clase_nomod: CLASE '(' ')' '{' . declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    PUBLICO        desplazar e ir al estado 243
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaraciones_publicas          ir al estado 246
+    declaracion_componente_unoomas  ir al estado 247
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 206
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' . '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    '{'  desplazar e ir al estado 253
+
+
+estado 207
+
+   54 tipo_lista_asociativa: LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo .
+
+    $default  reduce usando la regla 54 (tipo_lista_asociativa)
+
+
+estado 208
+
+  178 expresion_primaria: '(' expresion ')' .
+
+    $default  reduce usando la regla 178 (expresion_primaria)
+
+
+estado 209
+
+  143 llamada_subprograma: nombre '(' expresion_comas . ')' nombre '(' ')'
+  144 expresion_comas: expresion_comas . ',' expresion
+
+    ','  desplazar e ir al estado 254
+    ')'  desplazar e ir al estado 255
+
+
+estado 210
+
+  145 expresion_comas: expresion .
+
+    $default  reduce usando la regla 145 (expresion_comas)
+
+
+estado 211
+
+   48 tipo_lista: LISTA rango_lista DE tipo_no_estructurado_o_nombre_tipo .
+
+    $default  reduce usando la regla 48 (tipo_lista)
+
+
+estado 212
+
+   49 rango_lista: rango_lista ',' rango .
+
+    $default  reduce usando la regla 49 (rango_lista)
+
+
+estado 213
+
+  144 expresion_comas: expresion_comas . ',' expresion
+  168 objeto: objeto '[' expresion_comas . ']'
+
+    ','  desplazar e ir al estado 254
+    ']'  desplazar e ir al estado 256
+
+
+estado 214
+
+  169 objeto: objeto '.' IDENTIFICADOR .
+
+    $default  reduce usando la regla 169 (objeto)
+
+
+estado 215
+
+   51 rango: expresion DOS_PTOS expresion . expresion_rango_op
+
+    DOS_PTOS  desplazar e ir al estado 257
+
+    $default  reduce usando la regla 52 (expresion_rango_op)
+
+    expresion_rango_op  ir al estado 258
+
+
+estado 216
+
+   58 declaracion_campo: nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo ';'
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 259
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 217
+
+   56 tipo_registro: REGISTRO '{' declaracion_campo '}' .
+
+    $default  reduce usando la regla 56 (tipo_registro)
+
+
+estado 218
+
+   22 nombres_comas: nombres_comas . ',' nombre
+   57 declaracion_campo: declaracion_campo nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+    ','  desplazar e ir al estado 97
+    ':'  desplazar e ir al estado 260
+
+
+estado 219
+
+   47 expresion_constante_unoomas: expresion_constante_unoomas ',' expresion_constante .
+
+    $default  reduce usando la regla 47 (expresion_constante_unoomas)
+
+
+estado 220
+
+   65 valor_constante: '[' . valor_constante_comas ']'
+   66                | '[' . clave_valor ']'
+   67                | '[' . campo_valor ']'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 261
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                 ir al estado 262
+    id_op                  ir al estado 7
+    valor_constante        ir al estado 263
+    valor_constante_comas  ir al estado 264
+    clave_valor            ir al estado 265
+    campo_valor            ir al estado 266
+    llamada_subprograma    ir al estado 113
+    objeto                 ir al estado 114
+    expresion_constante    ir al estado 115
+    expresion_primaria     ir al estado 116
+    expresion              ir al estado 222
+
+
+estado 221
+
+   63 declaracion_constante: nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante .
+
+    $default  reduce usando la regla 63 (declaracion_constante)
+
+
+estado 222
+
+   64 valor_constante: expresion .
+
+    $default  reduce usando la regla 64 (valor_constante)
+
+
+estado 223
+
+   77 declaracion_variable: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';' .
+
+    $default  reduce usando la regla 77 (declaracion_variable)
+
+
+estado 224
+
+   76 declaracion_variable: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' . valor_constante ';'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 267
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 225
+
+  140 instruccion_devolver: DEVOLVER expresion ';' .
+
+    $default  reduce usando la regla 140 (instruccion_devolver)
+
+
+estado 226
+
+  148 instruccion_casos: EN CASO expresion . SEA caso ';'
+
+    SEA  desplazar e ir al estado 268
+
+
+estado 227
+
+  166 instruccion_lanzar: LANZAR nombre ';' .
+
+    $default  reduce usando la regla 166 (instruccion_lanzar)
+
+
+estado 228
+
+  158 clausula_iteracion: PARA nombre EN . objeto
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 269
+    id_op   ir al estado 7
+    objeto  ir al estado 270
+
+
+estado 229
+
+  163 instruccion_probar_excepto: PROBAR bloque_instrucciones EXCEPTO . clausula_excepcion FINALMENTE bloque_instrucciones
+  164                           | PROBAR bloque_instrucciones EXCEPTO . clausula_excepcion
+
+    CUANDO  desplazar e ir al estado 271
+
+    clausula_excepcion  ir al estado 272
+
+
+estado 230
+
+  159 clausula_iteracion: REPITE ELEMENTO nombre . EN rango DESCENDENTE
+  160                   | REPITE ELEMENTO nombre . EN rango
+
+    EN  desplazar e ir al estado 273
+
+
+estado 231
+
+  162 clausula_iteracion: REPITE HASTA expresion .
+
+    $default  reduce usando la regla 162 (clausula_iteracion)
+
+
+estado 232
+
+  138 instruccion_salir: SALIR SI expresion . ';'
+
+    ';'  desplazar e ir al estado 274
+
+
+estado 233
+
+  146 instruccion_si: SI expresion ENTONCES . bloque_instrucciones SINO bloque_instrucciones
+  147               | SI expresion ENTONCES . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 275
+
+
+estado 234
+
+  137 instruccion_asignacion: objeto '=' expresion . ';'
+
+    ';'  desplazar e ir al estado 276
+
+
+estado 235
+
+   22 nombres_comas: nombres_comas . ',' nombre
+  124 parametros_formales: nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo MODIFICABLE
+  125                    | nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo
+
+    ','  desplazar e ir al estado 97
+    ':'  desplazar e ir al estado 277
+
+
+estado 236
+
+  121 declaracion_parametros: '(' lista_parametros_formales . ')'
+  123 lista_parametros_formales: lista_parametros_formales . ';' parametros_formales
+
+    ';'  desplazar e ir al estado 278
+    ')'  desplazar e ir al estado 279
+
+
+estado 237
+
+  122 lista_parametros_formales: parametros_formales .
+
+    $default  reduce usando la regla 122 (lista_parametros_formales)
+
+
+estado 238
+
+  116 cabecera_funcion: FUNCION nombre declaracion_parametros FLECHA_DOBLE . tipo_no_estructurado_o_nombre_tipo
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 280
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 239
+
+  126 bloque_subprograma: declaracion_tipos declaracion_constantes declaracion_variables . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 281
+
+
+estado 240
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' '{' . declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    PUBLICO        desplazar e ir al estado 243
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaraciones_publicas          ir al estado 282
+    declaracion_componente_unoomas  ir al estado 247
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 241
+
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas ')' . '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    '{'  desplazar e ir al estado 283
+
+
+estado 242
+
+   99 declaracion_constante_anidada: CONSTANTE . declaracion_constante
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                 ir al estado 44
+    id_op                  ir al estado 7
+    declaracion_constante  ir al estado 284
+
+
+estado 243
+
+   85 declaraciones_publicas: PUBLICO . declaracion_componente_unoomas
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaracion_componente_unoomas  ir al estado 285
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 244
+
+   98 declaracion_tipo_anidado: TIPO . declaracion_tipo
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre            ir al estado 32
+    id_op             ir al estado 7
+    declaracion_tipo  ir al estado 286
+
+
+estado 245
+
+   22 nombres_comas: nombres_comas . ',' nombre
+  100 declaracion_atributos: nombres_comas . ':' tipo_no_estructurado_o_nombre_tipo ';'
+
+    ','  desplazar e ir al estado 97
+    ':'  desplazar e ir al estado 287
+
+
+estado 246
+
+   84 declaracion_clase_nomod: CLASE '(' ')' '{' declaraciones_publicas . declaraciones_semi declaraciones_privadas '}'
+
+    SEMIPUBLICO  desplazar e ir al estado 288
+
+    $default  reduce usando la regla 87 (declaraciones_semi)
+
+    declaraciones_semi  ir al estado 289
+
+
+estado 247
+
+   86 declaraciones_publicas: declaracion_componente_unoomas .
+   92 declaracion_componente_unoomas: declaracion_componente_unoomas . declaracion_componente
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    IDENTIFICADOR  reduce usando la regla 5 (id_op)
+    $default       reduce usando la regla 86 (declaraciones_publicas)
+
+    nombre                         ir al estado 51
+    id_op                          ir al estado 7
+    nombres_comas                  ir al estado 245
+    declaracion_componente         ir al estado 290
+    declaracion_tipo_anidado       ir al estado 249
+    declaracion_constante_anidada  ir al estado 250
+    declaracion_atributos          ir al estado 251
+    cabecera_subprograma           ir al estado 252
+    cabecera_funcion               ir al estado 93
+    cabecera_procedimiento         ir al estado 94
+    cabecera_constructor           ir al estado 95
+    cabecera_destructor            ir al estado 96
+
+
+estado 248
+
+   91 declaracion_componente_unoomas: declaracion_componente .
+
+    $default  reduce usando la regla 91 (declaracion_componente_unoomas)
+
+
+estado 249
+
+   93 declaracion_componente: declaracion_tipo_anidado .
+
+    $default  reduce usando la regla 93 (declaracion_componente)
+
+
+estado 250
+
+   94 declaracion_componente: declaracion_constante_anidada .
+
+    $default  reduce usando la regla 94 (declaracion_componente)
+
+
+estado 251
+
+   95 declaracion_componente: declaracion_atributos .
+
+    $default  reduce usando la regla 95 (declaracion_componente)
+
+
+estado 252
+
+   96 declaracion_componente: cabecera_subprograma . ';' modificadores ';'
+   97                       | cabecera_subprograma . ';'
+
+    ';'  desplazar e ir al estado 291
+
+
+estado 253
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' '{' . declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    PUBLICO        desplazar e ir al estado 243
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaraciones_publicas          ir al estado 292
+    declaracion_componente_unoomas  ir al estado 247
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 254
+
+  144 expresion_comas: expresion_comas ',' . expresion
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 293
+
+
+estado 255
+
+  143 llamada_subprograma: nombre '(' expresion_comas ')' . nombre '(' ')'
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 294
+    id_op   ir al estado 7
+
+
+estado 256
+
+  168 objeto: objeto '[' expresion_comas ']' .
+
+    $default  reduce usando la regla 168 (objeto)
+
+
+estado 257
+
+   53 expresion_rango_op: DOS_PTOS . expresion
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 295
+
+
+estado 258
+
+   51 rango: expresion DOS_PTOS expresion expresion_rango_op .
+
+    $default  reduce usando la regla 51 (rango)
+
+
+estado 259
+
+   58 declaracion_campo: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo . ';'
+
+    ';'  desplazar e ir al estado 296
+
+
+estado 260
+
+   57 declaracion_campo: declaracion_campo nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo ';'
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 297
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 261
+
+   71 clave_valor: CTC_CADENA . FLECHA_DOBLE valor_constante
+  172 expresion_constante: CTC_CADENA .
+
+    FLECHA_DOBLE  desplazar e ir al estado 298
+
+    $default  reduce usando la regla 172 (expresion_constante)
+
+
+estado 262
+
+   73 campo_valor: nombre . FLECHA_DOBLE valor_constante
+  143 llamada_subprograma: nombre . '(' expresion_comas ')' nombre '(' ')'
+  167 objeto: nombre .
+
+    FLECHA_DOBLE  desplazar e ir al estado 299
+    '('           desplazar e ir al estado 166
+
+    $default  reduce usando la regla 167 (objeto)
+
+
+estado 263
+
+   69 valor_constante_comas: valor_constante .
+
+    $default  reduce usando la regla 69 (valor_constante_comas)
+
+
+estado 264
+
+   65 valor_constante: '[' valor_constante_comas . ']'
+   68 valor_constante_comas: valor_constante_comas . ',' valor_constante
+
+    ','  desplazar e ir al estado 300
+    ']'  desplazar e ir al estado 301
+
+
+estado 265
+
+   66 valor_constante: '[' clave_valor . ']'
+   70 clave_valor: clave_valor . ',' CTC_CADENA FLECHA_DOBLE valor_constante
+
+    ','  desplazar e ir al estado 302
+    ']'  desplazar e ir al estado 303
+
+
+estado 266
+
+   67 valor_constante: '[' campo_valor . ']'
+   72 campo_valor: campo_valor . ',' nombre FLECHA_DOBLE valor_constante
+
+    ','  desplazar e ir al estado 304
+    ']'  desplazar e ir al estado 305
+
+
+estado 267
+
+   76 declaracion_variable: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante . ';'
+
+    ';'  desplazar e ir al estado 306
+
+
+estado 268
+
+  148 instruccion_casos: EN CASO expresion SEA . caso ';'
+
+    $default  reduce usando la regla 152 (entradas_op)
+
+    caso         ir al estado 307
+    entradas     ir al estado 308
+    entradas_op  ir al estado 309
+
+
+estado 269
+
+  167 objeto: nombre .
+
+    $default  reduce usando la regla 167 (objeto)
+
+
+estado 270
+
+  158 clausula_iteracion: PARA nombre EN objeto .
+  168 objeto: objeto . '[' expresion_comas ']'
+  169       | objeto . '.' IDENTIFICADOR
+
+    '['  desplazar e ir al estado 169
+    '.'  desplazar e ir al estado 170
+
+    $default  reduce usando la regla 158 (clausula_iteracion)
+
+
+estado 271
+
+  165 clausula_excepcion: CUANDO . nombre EJECUTA bloque_instrucciones
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 310
+    id_op   ir al estado 7
+
+
+estado 272
+
+  163 instruccion_probar_excepto: PROBAR bloque_instrucciones EXCEPTO clausula_excepcion . FINALMENTE bloque_instrucciones
+  164                           | PROBAR bloque_instrucciones EXCEPTO clausula_excepcion .
+
+    FINALMENTE  desplazar e ir al estado 311
+
+    $default  reduce usando la regla 164 (instruccion_probar_excepto)
+
+
+estado 273
+
+  159 clausula_iteracion: REPITE ELEMENTO nombre EN . rango DESCENDENTE
+  160                   | REPITE ELEMENTO nombre EN . rango
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    rango                ir al estado 312
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 117
+
+
+estado 274
+
+  138 instruccion_salir: SALIR SI expresion ';' .
+
+    $default  reduce usando la regla 138 (instruccion_salir)
+
+
+estado 275
+
+  146 instruccion_si: SI expresion ENTONCES bloque_instrucciones . SINO bloque_instrucciones
+  147               | SI expresion ENTONCES bloque_instrucciones .
+
+    SINO  desplazar e ir al estado 313
+
+    $default  reduce usando la regla 147 (instruccion_si)
+
+
+estado 276
+
+  137 instruccion_asignacion: objeto '=' expresion ';' .
+
+    $default  reduce usando la regla 137 (instruccion_asignacion)
+
+
+estado 277
+
+  124 parametros_formales: nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo MODIFICABLE
+  125                    | nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 314
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 278
+
+  123 lista_parametros_formales: lista_parametros_formales ';' . parametros_formales
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 51
+    id_op                ir al estado 7
+    nombres_comas        ir al estado 235
+    parametros_formales  ir al estado 315
+
+
+estado 279
+
+  121 declaracion_parametros: '(' lista_parametros_formales ')' .
+
+    $default  reduce usando la regla 121 (declaracion_parametros)
+
+
+estado 280
+
+  116 cabecera_funcion: FUNCION nombre declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo .
+
+    $default  reduce usando la regla 116 (cabecera_funcion)
+
+
+estado 281
+
+  126 bloque_subprograma: declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones .
+
+    $default  reduce usando la regla 126 (bloque_subprograma)
+
+
+estado 282
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' '{' declaraciones_publicas . declaraciones_semi declaraciones_privadas '}'
+
+    SEMIPUBLICO  desplazar e ir al estado 288
+
+    $default  reduce usando la regla 87 (declaraciones_semi)
+
+    declaraciones_semi  ir al estado 316
+
+
+estado 283
+
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas ')' '{' . declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    PUBLICO        desplazar e ir al estado 243
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaraciones_publicas          ir al estado 317
+    declaracion_componente_unoomas  ir al estado 247
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 284
+
+   99 declaracion_constante_anidada: CONSTANTE declaracion_constante .
+
+    $default  reduce usando la regla 99 (declaracion_constante_anidada)
+
+
+estado 285
+
+   85 declaraciones_publicas: PUBLICO declaracion_componente_unoomas .
+   92 declaracion_componente_unoomas: declaracion_componente_unoomas . declaracion_componente
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    IDENTIFICADOR  reduce usando la regla 5 (id_op)
+    $default       reduce usando la regla 85 (declaraciones_publicas)
+
+    nombre                         ir al estado 51
+    id_op                          ir al estado 7
+    nombres_comas                  ir al estado 245
+    declaracion_componente         ir al estado 290
+    declaracion_tipo_anidado       ir al estado 249
+    declaracion_constante_anidada  ir al estado 250
+    declaracion_atributos          ir al estado 251
+    cabecera_subprograma           ir al estado 252
+    cabecera_funcion               ir al estado 93
+    cabecera_procedimiento         ir al estado 94
+    cabecera_constructor           ir al estado 95
+    cabecera_destructor            ir al estado 96
+
+
+estado 286
+
+   26 declaracion_tipo: declaracion_tipo . nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
+   27                 | declaracion_tipo . nombre '=' tipo_estructurado
+   98 declaracion_tipo_anidado: TIPO declaracion_tipo .
+
+    IDENTIFICADOR  reduce usando la regla 5 (id_op)
+    IDENTIFICADOR  [reduce usando la regla 98 (declaracion_tipo_anidado)]
+    $default       reduce usando la regla 98 (declaracion_tipo_anidado)
+
+    nombre  ir al estado 43
+    id_op   ir al estado 7
+
+
+estado 287
+
+  100 declaracion_atributos: nombres_comas ':' . tipo_no_estructurado_o_nombre_tipo ';'
+
+    BOOLEANO  desplazar e ir al estado 54
+    CADENA    desplazar e ir al estado 55
+    CARACTER  desplazar e ir al estado 56
+    CONJUNTO  desplazar e ir al estado 58
+    ENTERO    desplazar e ir al estado 59
+    FICHERO   desplazar e ir al estado 60
+    LISTA     desplazar e ir al estado 61
+    REAL      desplazar e ir al estado 62
+    '('       desplazar e ir al estado 64
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                              ir al estado 65
+    id_op                               ir al estado 7
+    tipo_no_estructurado_o_nombre_tipo  ir al estado 318
+    tipo_escalar                        ir al estado 68
+    tipo_fichero                        ir al estado 69
+    tipo_enumerado                      ir al estado 70
+    tipo_lista                          ir al estado 71
+    tipo_lista_asociativa               ir al estado 72
+    tipo_conjunto                       ir al estado 73
+
+
+estado 288
+
+   88 declaraciones_semi: SEMIPUBLICO . declaracion_componente_unoomas
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaracion_componente_unoomas  ir al estado 319
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 289
+
+   84 declaracion_clase_nomod: CLASE '(' ')' '{' declaraciones_publicas declaraciones_semi . declaraciones_privadas '}'
+
+    PRIVADO  desplazar e ir al estado 320
+
+    $default  reduce usando la regla 89 (declaraciones_privadas)
+
+    declaraciones_privadas  ir al estado 321
+
+
+estado 290
+
+   92 declaracion_componente_unoomas: declaracion_componente_unoomas declaracion_componente .
+
+    $default  reduce usando la regla 92 (declaracion_componente_unoomas)
+
+
+estado 291
+
+   96 declaracion_componente: cabecera_subprograma ';' . modificadores ';'
+   97                       | cabecera_subprograma ';' .
+
+    ABSTRACTO   desplazar e ir al estado 322
+    ESPECIFICO  desplazar e ir al estado 323
+    FINAL       desplazar e ir al estado 324
+    GENERICO    desplazar e ir al estado 325
+
+    $default  reduce usando la regla 97 (declaracion_componente)
+
+    modificadores      ir al estado 326
+    modificador_comas  ir al estado 327
+    modificador        ir al estado 328
+
+
+estado 292
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' '{' declaraciones_publicas . declaraciones_semi declaraciones_privadas '}'
+
+    SEMIPUBLICO  desplazar e ir al estado 288
+
+    $default  reduce usando la regla 87 (declaraciones_semi)
+
+    declaraciones_semi  ir al estado 329
+
+
+estado 293
+
+  144 expresion_comas: expresion_comas ',' expresion .
+
+    $default  reduce usando la regla 144 (expresion_comas)
+
+
+estado 294
+
+  143 llamada_subprograma: nombre '(' expresion_comas ')' nombre . '(' ')'
+
+    '('  desplazar e ir al estado 330
+
+
+estado 295
+
+   53 expresion_rango_op: DOS_PTOS expresion .
+
+    $default  reduce usando la regla 53 (expresion_rango_op)
+
+
+estado 296
+
+   58 declaracion_campo: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';' .
+
+    $default  reduce usando la regla 58 (declaracion_campo)
+
+
+estado 297
+
+   57 declaracion_campo: declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo . ';'
+
+    ';'  desplazar e ir al estado 331
+
+
+estado 298
+
+   71 clave_valor: CTC_CADENA FLECHA_DOBLE . valor_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 332
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 299
+
+   73 campo_valor: nombre FLECHA_DOBLE . valor_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 333
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 300
+
+   68 valor_constante_comas: valor_constante_comas ',' . valor_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 334
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 301
+
+   65 valor_constante: '[' valor_constante_comas ']' .
+
+    $default  reduce usando la regla 65 (valor_constante)
+
+
+estado 302
+
+   70 clave_valor: clave_valor ',' . CTC_CADENA FLECHA_DOBLE valor_constante
+
+    CTC_CADENA  desplazar e ir al estado 335
+
+
+estado 303
+
+   66 valor_constante: '[' clave_valor ']' .
+
+    $default  reduce usando la regla 66 (valor_constante)
+
+
+estado 304
+
+   72 campo_valor: campo_valor ',' . nombre FLECHA_DOBLE valor_constante
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre  ir al estado 336
+    id_op   ir al estado 7
+
+
+estado 305
+
+   67 valor_constante: '[' campo_valor ']' .
+
+    $default  reduce usando la regla 67 (valor_constante)
+
+
+estado 306
+
+   76 declaracion_variable: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';' .
+
+    $default  reduce usando la regla 76 (declaracion_variable)
+
+
+estado 307
+
+  148 instruccion_casos: EN CASO expresion SEA caso . ';'
+  149 caso: caso . entradas FLECHA_DOBLE bloque_instrucciones
+
+    ';'  desplazar e ir al estado 337
+
+    $default  reduce usando la regla 152 (entradas_op)
+
+    entradas     ir al estado 338
+    entradas_op  ir al estado 309
+
+
+estado 308
+
+  150 caso: entradas . FLECHA_DOBLE bloque_instrucciones
+
+    FLECHA_DOBLE  desplazar e ir al estado 339
+
+
+estado 309
+
+  151 entradas: entradas_op . entrada
+  153 entradas_op: entradas_op . entrada '|'
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    OTRO          desplazar e ir al estado 340
+    '('           desplazar e ir al estado 109
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    rango                ir al estado 341
+    llamada_subprograma  ir al estado 113
+    entrada              ir al estado 342
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 343
+
+
+estado 310
+
+  165 clausula_excepcion: CUANDO nombre . EJECUTA bloque_instrucciones
+
+    EJECUTA  desplazar e ir al estado 344
+
+
+estado 311
+
+  163 instruccion_probar_excepto: PROBAR bloque_instrucciones EXCEPTO clausula_excepcion FINALMENTE . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 345
+
+
+estado 312
+
+  159 clausula_iteracion: REPITE ELEMENTO nombre EN rango . DESCENDENTE
+  160                   | REPITE ELEMENTO nombre EN rango .
+
+    DESCENDENTE  desplazar e ir al estado 346
+
+    $default  reduce usando la regla 160 (clausula_iteracion)
+
+
+estado 313
+
+  146 instruccion_si: SI expresion ENTONCES bloque_instrucciones SINO . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 347
+
+
+estado 314
+
+  124 parametros_formales: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo . MODIFICABLE
+  125                    | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo .
+
+    MODIFICABLE  desplazar e ir al estado 348
+
+    $default  reduce usando la regla 125 (parametros_formales)
+
+
+estado 315
+
+  123 lista_parametros_formales: lista_parametros_formales ';' parametros_formales .
+
+    $default  reduce usando la regla 123 (lista_parametros_formales)
+
+
+estado 316
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' '{' declaraciones_publicas declaraciones_semi . declaraciones_privadas '}'
+
+    PRIVADO  desplazar e ir al estado 320
+
+    $default  reduce usando la regla 89 (declaraciones_privadas)
+
+    declaraciones_privadas  ir al estado 349
+
+
+estado 317
+
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas . declaraciones_semi declaraciones_privadas '}'
+
+    SEMIPUBLICO  desplazar e ir al estado 288
+
+    $default  reduce usando la regla 87 (declaraciones_semi)
+
+    declaraciones_semi  ir al estado 350
+
+
+estado 318
+
+  100 declaracion_atributos: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo . ';'
+
+    ';'  desplazar e ir al estado 351
+
+
+estado 319
+
+   88 declaraciones_semi: SEMIPUBLICO declaracion_componente_unoomas .
+   92 declaracion_componente_unoomas: declaracion_componente_unoomas . declaracion_componente
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    IDENTIFICADOR  reduce usando la regla 5 (id_op)
+    $default       reduce usando la regla 88 (declaraciones_semi)
+
+    nombre                         ir al estado 51
+    id_op                          ir al estado 7
+    nombres_comas                  ir al estado 245
+    declaracion_componente         ir al estado 290
+    declaracion_tipo_anidado       ir al estado 249
+    declaracion_constante_anidada  ir al estado 250
+    declaracion_atributos          ir al estado 251
+    cabecera_subprograma           ir al estado 252
+    cabecera_funcion               ir al estado 93
+    cabecera_procedimiento         ir al estado 94
+    cabecera_constructor           ir al estado 95
+    cabecera_destructor            ir al estado 96
+
+
+estado 320
+
+   90 declaraciones_privadas: PRIVADO . declaracion_componente_unoomas
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                          ir al estado 51
+    id_op                           ir al estado 7
+    nombres_comas                   ir al estado 245
+    declaracion_componente_unoomas  ir al estado 352
+    declaracion_componente          ir al estado 248
+    declaracion_tipo_anidado        ir al estado 249
+    declaracion_constante_anidada   ir al estado 250
+    declaracion_atributos           ir al estado 251
+    cabecera_subprograma            ir al estado 252
+    cabecera_funcion                ir al estado 93
+    cabecera_procedimiento          ir al estado 94
+    cabecera_constructor            ir al estado 95
+    cabecera_destructor             ir al estado 96
+
+
+estado 321
+
+   84 declaracion_clase_nomod: CLASE '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas . '}'
+
+    '}'  desplazar e ir al estado 353
+
+
+estado 322
+
+  105 modificador: ABSTRACTO .
+
+    $default  reduce usando la regla 105 (modificador)
+
+
+estado 323
+
+  106 modificador: ESPECIFICO .
+
+    $default  reduce usando la regla 106 (modificador)
+
+
+estado 324
+
+  107 modificador: FINAL .
+
+    $default  reduce usando la regla 107 (modificador)
+
+
+estado 325
+
+  104 modificador: GENERICO .
+
+    $default  reduce usando la regla 104 (modificador)
+
+
+estado 326
+
+   96 declaracion_componente: cabecera_subprograma ';' modificadores . ';'
+
+    ';'  desplazar e ir al estado 354
+
+
+estado 327
+
+  101 modificadores: modificador_comas .
+  102 modificador_comas: modificador_comas . ',' modificador
+
+    ','  desplazar e ir al estado 355
+
+    $default  reduce usando la regla 101 (modificadores)
+
+
+estado 328
+
+  103 modificador_comas: modificador .
+
+    $default  reduce usando la regla 103 (modificador_comas)
+
+
+estado 329
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi . declaraciones_privadas '}'
+
+    PRIVADO  desplazar e ir al estado 320
+
+    $default  reduce usando la regla 89 (declaraciones_privadas)
+
+    declaraciones_privadas  ir al estado 356
+
+
+estado 330
+
+  143 llamada_subprograma: nombre '(' expresion_comas ')' nombre '(' . ')'
+
+    ')'  desplazar e ir al estado 357
+
+
+estado 331
+
+   57 declaracion_campo: declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';' .
+
+    $default  reduce usando la regla 57 (declaracion_campo)
+
+
+estado 332
+
+   71 clave_valor: CTC_CADENA FLECHA_DOBLE valor_constante .
+
+    $default  reduce usando la regla 71 (clave_valor)
+
+
+estado 333
+
+   73 campo_valor: nombre FLECHA_DOBLE valor_constante .
+
+    $default  reduce usando la regla 73 (campo_valor)
+
+
+estado 334
+
+   68 valor_constante_comas: valor_constante_comas ',' valor_constante .
+
+    $default  reduce usando la regla 68 (valor_constante_comas)
+
+
+estado 335
+
+   70 clave_valor: clave_valor ',' CTC_CADENA . FLECHA_DOBLE valor_constante
+
+    FLECHA_DOBLE  desplazar e ir al estado 358
+
+
+estado 336
+
+   72 campo_valor: campo_valor ',' nombre . FLECHA_DOBLE valor_constante
+
+    FLECHA_DOBLE  desplazar e ir al estado 359
+
+
+estado 337
+
+  148 instruccion_casos: EN CASO expresion SEA caso ';' .
+
+    $default  reduce usando la regla 148 (instruccion_casos)
+
+
+estado 338
+
+  149 caso: caso entradas . FLECHA_DOBLE bloque_instrucciones
+
+    FLECHA_DOBLE  desplazar e ir al estado 360
+
+
+estado 339
+
+  150 caso: entradas FLECHA_DOBLE . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 361
+
+
+estado 340
+
+  156 entrada: OTRO .
+
+    $default  reduce usando la regla 156 (entrada)
+
+
+estado 341
+
+  155 entrada: rango .
+
+    $default  reduce usando la regla 155 (entrada)
+
+
+estado 342
+
+  151 entradas: entradas_op entrada .
+  153 entradas_op: entradas_op entrada . '|'
+
+    '|'  desplazar e ir al estado 362
+
+    $default  reduce usando la regla 151 (entradas)
+
+
+estado 343
+
+   51 rango: expresion . DOS_PTOS expresion expresion_rango_op
+  154 entrada: expresion .
+
+    DOS_PTOS  desplazar e ir al estado 171
+
+    $default  reduce usando la regla 154 (entrada)
+
+
+estado 344
+
+  165 clausula_excepcion: CUANDO nombre EJECUTA . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 363
+
+
+estado 345
+
+  163 instruccion_probar_excepto: PROBAR bloque_instrucciones EXCEPTO clausula_excepcion FINALMENTE bloque_instrucciones .
+
+    $default  reduce usando la regla 163 (instruccion_probar_excepto)
+
+
+estado 346
+
+  159 clausula_iteracion: REPITE ELEMENTO nombre EN rango DESCENDENTE .
+
+    $default  reduce usando la regla 159 (clausula_iteracion)
+
+
+estado 347
+
+  146 instruccion_si: SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones .
+
+    $default  reduce usando la regla 146 (instruccion_si)
+
+
+estado 348
+
+  124 parametros_formales: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo MODIFICABLE .
+
+    $default  reduce usando la regla 124 (parametros_formales)
+
+
+estado 349
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas . '}'
+
+    '}'  desplazar e ir al estado 364
+
+
+estado 350
+
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi . declaraciones_privadas '}'
+
+    PRIVADO  desplazar e ir al estado 320
+
+    $default  reduce usando la regla 89 (declaraciones_privadas)
+
+    declaraciones_privadas  ir al estado 365
+
+
+estado 351
+
+  100 declaracion_atributos: nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';' .
+
+    $default  reduce usando la regla 100 (declaracion_atributos)
+
+
+estado 352
+
+   90 declaraciones_privadas: PRIVADO declaracion_componente_unoomas .
+   92 declaracion_componente_unoomas: declaracion_componente_unoomas . declaracion_componente
+
+    CONSTANTE      desplazar e ir al estado 242
+    CONSTRUCTOR    desplazar e ir al estado 87
+    DESTRUCTOR     desplazar e ir al estado 88
+    FUNCION        desplazar e ir al estado 89
+    PROCEDIMIENTO  desplazar e ir al estado 90
+    TIPO           desplazar e ir al estado 244
+
+    '}'       reduce usando la regla 90 (declaraciones_privadas)
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre                         ir al estado 51
+    id_op                          ir al estado 7
+    nombres_comas                  ir al estado 245
+    declaracion_componente         ir al estado 290
+    declaracion_tipo_anidado       ir al estado 249
+    declaracion_constante_anidada  ir al estado 250
+    declaracion_atributos          ir al estado 251
+    cabecera_subprograma           ir al estado 252
+    cabecera_funcion               ir al estado 93
+    cabecera_procedimiento         ir al estado 94
+    cabecera_constructor           ir al estado 95
+    cabecera_destructor            ir al estado 96
+
+
+estado 353
+
+   84 declaracion_clase_nomod: CLASE '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' .
+
+    $default  reduce usando la regla 84 (declaracion_clase_nomod)
+
+
+estado 354
+
+   96 declaracion_componente: cabecera_subprograma ';' modificadores ';' .
+
+    $default  reduce usando la regla 96 (declaracion_componente)
+
+
+estado 355
+
+  102 modificador_comas: modificador_comas ',' . modificador
+
+    ABSTRACTO   desplazar e ir al estado 322
+    ESPECIFICO  desplazar e ir al estado 323
+    FINAL       desplazar e ir al estado 324
+    GENERICO    desplazar e ir al estado 325
+
+    modificador  ir al estado 366
+
+
+estado 356
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas . '}'
+
+    '}'  desplazar e ir al estado 367
+
+
+estado 357
+
+  143 llamada_subprograma: nombre '(' expresion_comas ')' nombre '(' ')' .
+
+    $default  reduce usando la regla 143 (llamada_subprograma)
+
+
+estado 358
+
+   70 clave_valor: clave_valor ',' CTC_CADENA FLECHA_DOBLE . valor_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 368
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 359
+
+   72 campo_valor: campo_valor ',' nombre FLECHA_DOBLE . valor_constante
+
+    CTC_BOOLEANA  desplazar e ir al estado 104
+    CTC_CADENA    desplazar e ir al estado 105
+    CTC_CARACTER  desplazar e ir al estado 106
+    CTC_ENTERA    desplazar e ir al estado 107
+    CTC_REAL      desplazar e ir al estado 108
+    '('           desplazar e ir al estado 109
+    '['           desplazar e ir al estado 220
+
+    $default  reduce usando la regla 5 (id_op)
+
+    nombre               ir al estado 110
+    id_op                ir al estado 7
+    valor_constante      ir al estado 369
+    llamada_subprograma  ir al estado 113
+    objeto               ir al estado 114
+    expresion_constante  ir al estado 115
+    expresion_primaria   ir al estado 116
+    expresion            ir al estado 222
+
+
+estado 360
+
+  149 caso: caso entradas FLECHA_DOBLE . bloque_instrucciones
+
+    '{'  desplazar e ir al estado 83
+
+    bloque_instrucciones  ir al estado 370
+
+
+estado 361
+
+  150 caso: entradas FLECHA_DOBLE bloque_instrucciones .
+
+    $default  reduce usando la regla 150 (caso)
+
+
+estado 362
+
+  153 entradas_op: entradas_op entrada '|' .
+
+    $default  reduce usando la regla 153 (entradas_op)
+
+
+estado 363
+
+  165 clausula_excepcion: CUANDO nombre EJECUTA bloque_instrucciones .
+
+    $default  reduce usando la regla 165 (clausula_excepcion)
+
+
+estado 364
+
+   81 declaracion_clase_mod: CLASE FINAL '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' .
+
+    $default  reduce usando la regla 81 (declaracion_clase_mod)
+
+
+estado 365
+
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas . '}'
+
+    '}'  desplazar e ir al estado 371
+
+
+estado 366
+
+  102 modificador_comas: modificador_comas ',' modificador .
+
+    $default  reduce usando la regla 102 (modificador_comas)
+
+
+estado 367
+
+   83 declaracion_clase_nomod: CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' .
+
+    $default  reduce usando la regla 83 (declaracion_clase_nomod)
+
+
+estado 368
+
+   70 clave_valor: clave_valor ',' CTC_CADENA FLECHA_DOBLE valor_constante .
+
+    $default  reduce usando la regla 70 (clave_valor)
+
+
+estado 369
+
+   72 campo_valor: campo_valor ',' nombre FLECHA_DOBLE valor_constante .
+
+    $default  reduce usando la regla 72 (campo_valor)
+
+
+estado 370
+
+  149 caso: caso entradas FLECHA_DOBLE bloque_instrucciones .
+
+    $default  reduce usando la regla 149 (caso)
+
+
+estado 371
+
+   82 declaracion_clase_mod: CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' .
+
+    $default  reduce usando la regla 82 (declaracion_clase_mod)
