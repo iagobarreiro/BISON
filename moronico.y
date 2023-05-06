@@ -31,12 +31,12 @@ definicion_programa : PROGRAMA nombre ';' bloque_programa {printf("\t def_progra
 nombre : identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
           ;
 
-identificador_con_cuatro_ptos_ceroomas : %empty
+identificador_con_cuatro_ptos_ceroomas : 
                                         | identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR CUATRO_PTOS {printf("\t identificador_con_cuatro_ptos_ceroomas -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR '::' \n");}
                                         | IDENTIFICADOR CUATRO_PTOS {printf("\t identificador_con_cuatro_ptos_ceroomas -> IDENTIFICADOR '::' \n");}
                                         ;
 
-bloque_programa : declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op bloque_instrucciones \n");}
+bloque_programa : declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones \n");}
           ;
 
 bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instrucciones -> '{' instruccion_unoomas '}'  \n");}
@@ -44,18 +44,18 @@ bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instruccio
 
 instruccion_unoomas : instruccion_unoomas instruccion {printf("\t instruccion_unoomas -> instruccion_unoomas instruccion  \n");}
                       | instruccion {printf("\t instruccion_unoomas -> instruccion  \n");}
-                      | %empty
+                      | 
                       ; 
 
 definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo {printf("\t definicion_paquete -> PAQUETE nombre ';' seccion_cabecera seccion_cuerpo  \n");}
                     ;
 
-seccion_cabecera : CABECERA declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_interfaces_op {printf("\t seccion_cabecera -> CABECERA declaracion_cargas_op declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_interfaces_op  \n");}
+seccion_cabecera : CABECERA declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces {printf("\t seccion_cabecera -> CABECERA declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces  \n");}
                   ;
 
-seccion_cuerpo : CUERPO declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_subpograma_unoomas {printf("\t seccion_cuerpo -> CUERPO declaracion_tipos_op declaracion_constantes_op declaracion_variables_op declaracion_subpograma_unoomas  \n");}
+seccion_cuerpo : CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma {printf("\t seccion_cuerpo -> CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma  \n");}
 
-declaracion_cargas_op : %empty
+declaracion_cargas_op : 
                 | CARGA declaracion_carga_unoomas ';' {printf("\t declaracion_cargas_op -> CARGA declaracion_carga_unoomas ';'  \n");}
                 ;
 
@@ -63,11 +63,11 @@ declaracion_carga_unoomas : declaracion_carga_unoomas ',' nombre en_path_op nomb
                     | nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> nombre en_path_op nombres_op  \n");}
                     ;
 
-en_path_op : %empty
+en_path_op : 
             | EN PATH {printf("\t en_path_op -> EN PATH  \n");}
             ;
 
-nombres_op : %empty
+nombres_op : 
             | '('  nombres_comas ')' {printf("\t nombres_op -> '('  nombres_comas ')'  \n");}
             ;
 
@@ -80,14 +80,15 @@ nombres_comas : nombres_comas ',' nombre {printf("\t nombres_comas -> nombres_co
 /* tipos (incl. clases) */
 /************************/
 
-declaracion_tipos : declaracion_tipos TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> declaracionlaracion_tipos TIPO declaracion_tipo  \n");}
+declaracion_tipos : 
+                  | declaracion_tipos TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> declaracionlaracion_tipos TIPO declaracion_tipo  \n");}
                   | TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo  \n");}
                    ;
 
 
 declaracion_tipo :  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
                  |  nombre '=' tipo_estructurado {printf("\t declaracion_tipo -> nombre '=' tipo_estructurado  \n");}
-
+                 ;              
 
 tipo_no_estructurado_o_nombre_tipo : nombre {printf("\t tipo_no_estructurado_o_nombre_tipo -> nombre  \n");}
                                     | tipo_escalar {printf("\t tipo_no_estructurado_o_nombre_tipo -> tipo_escalar  \n");}
@@ -129,7 +130,7 @@ rango_lista : rango_lista ',' rango {printf("\t rango_lista ->  rango_lista ',' 
 rango : expresion DOS_PTOS expresion expresion_rango_op {printf("\t rango -> expresion DOS_PTOS expresion expresion_rango_op  \n");}
       ;
 
-expresion_rango_op : %empty
+expresion_rango_op : 
                     | DOS_PTOS expresion  {printf("\t expresion_rango_op -> DOS_PTOS expresion  \n");}
                     ;
 
@@ -150,7 +151,8 @@ declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_n
 /* constantes, variables, interfaces */
 /*************************************/
 
-declaracion_constantes : declaracion_constantes CONSTANTE declaracion_constante
+declaracion_constantes : 
+                        | declaracion_constantes CONSTANTE declaracion_constante
                         | CONSTANTE declaracion_constante
                         ;
 
@@ -174,7 +176,8 @@ campo_valor : campo_valor ',' nombre FLECHA_DOBLE valor_constante
             | nombre FLECHA_DOBLE valor_constante
             ;              
 
-declaracion_variables : VARIABLE declaracion_variable
+declaracion_variables : 
+                      | VARIABLE declaracion_variable
                       ;
 
 declaracion_variable : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
@@ -182,28 +185,28 @@ declaracion_variable : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo '=' 
                       ;
 
 
-declaracion_interfaces : declaracion_interfaces INTERFAZ cabecera_subprograma ';'
+declaracion_interfaces :  
+                        | declaracion_interfaces INTERFAZ cabecera_subprograma ';'
                         | INTERFAZ cabecera_subprograma ';'
                         ;
 
 
-declaracion_case : CLASE final_op '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
-                 | CLASE final_op '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'                  
-                 ;
+declaracion_clase : CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+                  | CLASE FINAL '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+                  | CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' 
+                  | CLASE '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'                 
+                  ;
 
-final_op : %empty
-          | FINAL
-          ;   
 
 declaraciones_publicas : PUBLICO declaracion_componente_unoomas
                         | declaracion_componente_unoomas
                         ;  
 
-declaraciones_semi : %empty
+declaraciones_semi : 
                     | SEMIPUBLICO declaracion_componente_unoomas
                     ;
 
-declaraciones_privadas : %empty
+declaraciones_privadas : 
                         | PRIVADO declaracion_componente_unoomas
                         ;
 
@@ -246,7 +249,8 @@ modificador : GENERICO
 /****************/
 
 
-declaracion_subprograma : cabecera_subprograma bloque_subprograma
+declaracion_subprograma : declaracion_subprograma cabecera_subprograma bloque_subprograma
+                        | cabecera_subprograma bloque_subprograma
                         ;
 
 cabecera_subprograma : cabecera_funcion
@@ -267,7 +271,7 @@ cabecera_constructor : CONSTRUCTOR nombre declaracion_parametros
 cabecera_destructor : DESTRUCTOR nombre
                     ;
 
-declaracion_parametros : %empty
+declaracion_parametros : 
                       | '(' lista_parametros_formales ')'
                       ;
   
@@ -279,7 +283,7 @@ parametros_formales : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo MODIF
                     | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo
                     ;
 
-bloque_subprograma : declaracion_tipos_op declaracion_constantes_op declaracion_variables_op bloque_instrucciones
+bloque_subprograma : declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
                     ;
 
 
@@ -326,7 +330,7 @@ instruccion_si : SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucc
                | SI expresion ENTONCES bloque_instrucciones
                ;
 
-instruccion_casos : EN  CASO EXPRESION SEA caso ';'
+instruccion_casos : EN  CASO expresion SEA caso ';'
                   ;
 
 caso : caso entradas FLECHA_DOBLE bloque_instrucciones
@@ -335,6 +339,11 @@ caso : caso entradas FLECHA_DOBLE bloque_instrucciones
 
 entradas: entrada 
         | entradas '|' entrada 
+        ;
+
+entrada : expresion 
+        | rango
+        | OTRO
         ;
 
 instruccion_bucle : clausula_iteracion bloque_instrucciones
@@ -382,7 +391,8 @@ expresion_primaria : expresion_constante
 
 
 
-
+expresion : 
+          ;
 %%
 
 int yyerror(char *s) {
