@@ -7,7 +7,7 @@
 
   #define YYDEBUG 1
 
-  void yyerror(const char* mensaje);
+  int yyerror(char *);
 
 %}
 
@@ -27,10 +27,11 @@ programa : definicion_programa {printf("\t programa -> def_programa \n");}
           ;
 
 definicion_programa : PROGRAMA nombre ';' bloque_programa {printf("\t def_programa -> PROGRAMA ';' bloque_programa \n");}
+          | error ';' {yyerrok; };
           ;
 
 nombre :  id_op IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
-        | error ';' {yyerror("Error en nombre"); };
+        | error ';' {yyerrok; };
           ;
 
 id_op : 
@@ -39,6 +40,7 @@ id_op :
 
 
 bloque_programa : declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones \n");}
+                | error ';' {yyerror("Error en bloque programa");};         
           ;
 
 bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instrucciones -> '{' instruccion_unoomas '}'  \n");}
@@ -470,10 +472,10 @@ expresion : expresion_or_logico
           ;
 %%
 
-void yyerror(const char* mensaje)
-{
-    printf("*******************Error: %s\n", mensaje);
-}
+int yyerror(char *s) {
+  fflush(stdout);
+  printf("   *****************, %s\n",s);
+  }
 
 int yywrap() {
   return(1);
