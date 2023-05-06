@@ -758,19 +758,18 @@ char *yytext;
 #define INITIAL 0
 #line 2 ".\\moronico.l"
 #include <stdio.h>
-#include "moronico.h"
-#include "y.tab.h"
+#include "moronico.tab.h"
 
 /*Posible para error*/
 
-void yyerror(char *);
+// void yyerror(char *);
 
 
 
 /*Macros de apoyo */
 /*Macros usadas en las reglas*/
 /*Opcion para no ser sensible a minusculas y mayusulas. ?i:reg-ex no funciona en mi version*/
-#line 774 "lex.yy.c"
+#line 773 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -921,11 +920,11 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 66 ".\\moronico.l"
+#line 65 ".\\moronico.l"
 
 
   /*Palabras reservadas*/
-#line 929 "lex.yy.c"
+#line 928 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -1018,402 +1017,402 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 69 ".\\moronico.l"
+#line 68 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return ABSTRACTO; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 70 ".\\moronico.l"
+#line 69 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return ASOCIATIVA; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 71 ".\\moronico.l"
+#line 70 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return BOOLEANO; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 72 ".\\moronico.l"
+#line 71 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CABECERA; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 73 ".\\moronico.l"
+#line 72 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CADENA; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 74 ".\\moronico.l"
+#line 73 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CASO; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 75 ".\\moronico.l"
+#line 74 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CARACTER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 76 ".\\moronico.l"
+#line 75 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CLASE; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 77 ".\\moronico.l"
+#line 76 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CONJUNTO; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 78 ".\\moronico.l"
+#line 77 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CONSTANTE; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 79 ".\\moronico.l"
+#line 78 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CUERPO; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 80 ".\\moronico.l"
+#line 79 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CONSTRUCTOR; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 81 ".\\moronico.l"
+#line 80 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CUANDO; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 82 ".\\moronico.l"
+#line 81 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return DESCENDENTE; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 83 ".\\moronico.l"
+#line 82 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return DESTRUCTOR; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 84 ".\\moronico.l"
+#line 83 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return DE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 85 ".\\moronico.l"
+#line 84 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return DEVOLVER; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 86 ".\\moronico.l"
+#line 85 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return CARGA; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 87 ".\\moronico.l"
+#line 86 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return ELEMENTO; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 88 ".\\moronico.l"
+#line 87 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return EJECUTA; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 89 ".\\moronico.l"
+#line 88 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return EN; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 90 ".\\moronico.l"
+#line 89 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return ENTERO; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 91 ".\\moronico.l"
+#line 90 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return ENTONCES; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 92 ".\\moronico.l"
+#line 91 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return ESPECIFICO; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 93 ".\\moronico.l"
+#line 92 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return EXCEPTO; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 94 ".\\moronico.l"
+#line 93 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return FICHERO; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 95 ".\\moronico.l"
+#line 94 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return FINAL; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 96 ".\\moronico.l"
+#line 95 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return FINALMENTE; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 97 ".\\moronico.l"
+#line 96 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return FUNCION; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 98 ".\\moronico.l"
+#line 97 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return GENERICO; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 99 ".\\moronico.l"
+#line 98 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return HASTA; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 100 ".\\moronico.l"
+#line 99 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return INTERFAZ; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 101 ".\\moronico.l"
+#line 100 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return LANZAR; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 102 ".\\moronico.l"
+#line 101 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return LISTA; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 103 ".\\moronico.l"
+#line 102 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return MIENTRAS; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 104 ".\\moronico.l"
+#line 103 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return MODIFICABLE; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 105 ".\\moronico.l"
+#line 104 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return OTRO; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 106 ".\\moronico.l"
+#line 105 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PAQUETE; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 107 ".\\moronico.l"
+#line 106 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PARA; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 108 ".\\moronico.l"
+#line 107 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PRIVADO; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 109 ".\\moronico.l"
+#line 108 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PROBAR; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 110 ".\\moronico.l"
+#line 109 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PROCEDIMIENTO; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 111 ".\\moronico.l"
+#line 110 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PROGRAMA; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 112 ".\\moronico.l"
+#line 111 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return PUBLICO; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 113 ".\\moronico.l"
+#line 112 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return REAL; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 114 ".\\moronico.l"
+#line 113 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return REGISTRO; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 115 ".\\moronico.l"
+#line 114 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return REPITE; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 116 ".\\moronico.l"
+#line 115 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return SALIR; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 117 ".\\moronico.l"
+#line 116 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return SEA; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 118 ".\\moronico.l"
+#line 117 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return SEMIPUBLICO; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 119 ".\\moronico.l"
+#line 118 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return SI; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 120 ".\\moronico.l"
+#line 119 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return SINO; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 121 ".\\moronico.l"
+#line 120 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return TIPO; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 122 ".\\moronico.l"
+#line 121 ".\\moronico.l"
 { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return VARIABLE; }
 	YY_BREAK
 /*Identificadores*/
 case 55:
 YY_RULE_SETUP
-#line 125 ".\\moronico.l"
+#line 124 ".\\moronico.l"
 { printf("linea %d, identificador: %s\n", yylineno, yytext); return IDENTIFICADOR; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 128 ".\\moronico.l"
+#line 127 ".\\moronico.l"
 { printf("linea %d, PATH: %s\n", yylineno, yytext); return PATH; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 129 ".\\moronico.l"
+#line 128 ".\\moronico.l"
 { printf("linea %d, constante entera: %s\n", yylineno, yytext); return CTC_ENTERA; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 130 ".\\moronico.l"
+#line 129 ".\\moronico.l"
 { printf("linea %d, constante real: %s\n", yylineno, yytext); return CTC_REAL; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 131 ".\\moronico.l"
+#line 130 ".\\moronico.l"
 { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 132 ".\\moronico.l"
+#line 131 ".\\moronico.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 /*En el caso de los delimitadores de un unico caracter se devuelve el mismo caracter*/
 case 61:
 YY_RULE_SETUP
-#line 135 ".\\moronico.l"
+#line 134 ".\\moronico.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 136 ".\\moronico.l"
+#line 135 ".\\moronico.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return CUATRO_PTOS; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 137 ".\\moronico.l"
+#line 136 ".\\moronico.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return DOS_PTOS; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 138 ".\\moronico.l"
+#line 137 ".\\moronico.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return FLECHA_DOBLE; }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 141 ".\\moronico.l"
+#line 140 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 142 ".\\moronico.l"
+#line 141 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return POTENCIA; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 143 ".\\moronico.l"
+#line 142 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return DESPI; }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 144 ".\\moronico.l"
+#line 143 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return DESPD; }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 145 ".\\moronico.l"
+#line 144 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return EQ; }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 146 ".\\moronico.l"
+#line 145 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return GEQ; }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 147 ".\\moronico.l"
+#line 146 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return LEQ; }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 148 ".\\moronico.l"
+#line 147 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return NEQ; }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 149 ".\\moronico.l"
+#line 148 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return OR; }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 150 ".\\moronico.l"
+#line 149 ".\\moronico.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return AND; }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 153 ".\\moronico.l"
+#line 152 ".\\moronico.l"
 {}
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 154 ".\\moronico.l"
+#line 153 ".\\moronico.l"
 {}
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 157 ".\\moronico.l"
+#line 156 ".\\moronico.l"
 {}
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 161 ".\\moronico.l"
+#line 160 ".\\moronico.l"
 { printf ("Error en la linea %d, caracter no reconocido %s\n", yylineno, yytext); }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 164 ".\\moronico.l"
+#line 163 ".\\moronico.l"
 ECHO;
 	YY_BREAK
-#line 1417 "lex.yy.c"
+#line 1416 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -2297,22 +2296,6 @@ int main()
 	return 0;
 	}
 #endif
-#line 164 ".\\moronico.l"
+#line 163 ".\\moronico.l"
 
 
-int yywrap()
-{
-  return(1);
-}
-
-int main(int argc, char *argv[]) {
-
-  if (argc < 2) {
-    printf("Uso: ./moronico NombreArchivo\n");
-    exit(1);
-    }
-
-  yyin = fopen(argv[1],"r");
-
-  while (yylex());
-  }

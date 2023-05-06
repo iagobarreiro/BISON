@@ -1,12 +1,6 @@
 %{
 #include <stdio.h>
-#include "moronico.h"
-#include "y.tab.h"
-
-/*Posible para error*/
-
-void yyerror(char *);
-
+#include "moronico.tab.h"
 
 
 %}
@@ -163,19 +157,3 @@ variable { printf("linea %d, palabra reservada: %s\n", yylineno, yytext); return
 
 %%
 
-int yywrap()
-{
-  return(1);
-}
-
-int main(int argc, char *argv[]) {
-
-  if (argc < 2) {
-    printf("Uso: ./moronico NombreArchivo\n");
-    exit(1);
-    }
-
-  yyin = fopen(argv[1],"r");
-
-  while (yylex());
-  }

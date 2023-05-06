@@ -7,6 +7,8 @@
 
   #define YYDEBUG 1
 
+  void yyerror(const char* mensaje);
+
 %}
 
 %token ABSTRACTO AND ASOCIATIVA BOOLEANO CABECERA CADENA CASO CARACTER CARGA CLASE CONJUNTO CONSTANTE CUERPO CTC_BOOLEANA CTC_CADENA CTC_CARACTER CTC_ENTERA CTC_REAL 
@@ -28,6 +30,7 @@ definicion_programa : PROGRAMA nombre ';' bloque_programa {printf("\t def_progra
           ;
 
 nombre :  id_op IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
+        | error ';' {yyerror("Error en nombre"); };
           ;
 
 id_op : 
@@ -79,13 +82,14 @@ nombres_comas : nombres_comas ',' nombre {printf("\t nombres_comas -> nombres_co
 /************************/
 
 declaracion_tipos :
-                  | TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo  \n");}
+                  | TIPO declaracion_tipo_unoomas {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo  \n");}
                   ;
 
+declaracion_tipo_unoomas : declaracion_tipo_unoomas declaracion_tipo
+                         | declaracion_tipo
+                         ;
 
-declaracion_tipo :  declaracion_tipo nombre '=' tipo_no_estructurado_o_nombre_tipo ';'
-                 |  declaracion_tipo nombre '=' tipo_estructurado
-                 |  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
+declaracion_tipo :  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
                  |  nombre '=' tipo_estructurado {printf("\t declaracion_tipo -> nombre '=' tipo_estructurado  \n");}
                  ;              
 
@@ -402,16 +406,74 @@ expresion_primaria : expresion_constante
                    | '(' expresion ')'
                    ;
 
+expresion_unitaria : '-' expresion_primaria
+                   | expresion_primaria
+                   ;
+
+expresion_potencia : expresion_unitaria POTENCIA expresion_potencia
+                   | expresion_unitaria
+                   ;
+
+expresion_prod : expresion_prod '*' expresion_potencia
+               | expresion_prod '/' expresion_potencia
+               | expresion_prod '%' expresion_potencia
+               | expresion_potencia
+               ;
+
+expresion_sum : expresion_sum '+' expresion_prod
+              | expresion_sum '-' expresion_prod
+              | expresion_prod
+              ;
+
+expresion_desplz : expresion_desplz DESPI expresion_sum
+                 | expresion_desplz DESPD expresion_sum
+                 |expresion_sum
+                 ;
 
 
-expresion : expresion_primaria
+expresion_and_bin : expresion_and_bin '&' expresion_desplz
+                  | expresion_desplz
+                  ;
+
+expresion_or_bin : expresion_or_bin '^' expresion_and_bin
+                  | expresion_and_bin
+                  ;
+
+expresion_xor_bin : expresion_xor_bin '@' expresion_desplz
+                  | expresion_or_bin
+                  ;
+
+expresion_comparar : expresion_comparar '<' expresion_xor_bin
+                   | expresion_comparar '>' expresion_xor_bin
+                   | expresion_comparar LEQ expresion_xor_bin
+                   | expresion_comparar GEQ expresion_xor_bin
+                   | expresion_comparar EQ expresion_xor_bin
+                   | expresion_comparar NEQ expresion_xor_bin
+                   | expresion_xor_bin
+                   ;
+
+expresion_negacion : '!' expresion_negacion
+                   | expresion_comparar
+                   ;
+
+expresion_and_logico : expresion_and_logico AND expresion_negacion
+                    | expresion_negacion
+                    ;
+
+
+expresion_or_logico : expresion_or_logico OR expresion_and_logico
+                    | expresion_and_logico
+                    ;
+                    
+
+expresion : expresion_or_logico
           ;
 %%
 
-int yyerror(char *s) {
-  fflush(stdout);
-  printf("***************** %s\n",s);
-  }
+void yyerror(const char* mensaje)
+{
+    printf("*******************Error: %s\n", mensaje);
+}
 
 int yywrap() {
   return(1);
