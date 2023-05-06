@@ -80,14 +80,13 @@ nombres_comas : nombres_comas ',' nombre {printf("\t nombres_comas -> nombres_co
 /* tipos (incl. clases) */
 /************************/
 
-declaracionlaracion_tipos : TIPO declaracion_tipo_unoomas {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo_unoomas  \n");}
-          ;
-        
-declaracion_tipo_unoomas : declaracion_carga_unoomas nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo_unoomas -> declaracion_carga_unoomas nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
-                 | declaracion_carga_unoomas nombre '=' tipo_estructurado {printf("\t declaracion_tipo_unoomas -> declaracion_carga_unoomas nombre '=' tipo_estructurado  \n");}
-                 |  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo_unoomas -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
-                 |  nombre '=' tipo_estructurado {printf("\t declaracion_tipo_unoomas -> nombre '=' tipo_estructurado  \n");}
-                 ;
+declaracion_tipos : declaracion_tipos TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> declaracionlaracion_tipos TIPO declaracion_tipo  \n");}
+                  | TIPO declaracion_tipo {printf("\t declaracionlaracion_tipos -> TIPO declaracion_tipo  \n");}
+                   ;
+
+
+declaracion_tipo :  nombre '=' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'  \n");}
+                 |  nombre '=' tipo_estructurado {printf("\t declaracion_tipo -> nombre '=' tipo_estructurado  \n");}
 
 
 tipo_no_estructurado_o_nombre_tipo : nombre {printf("\t tipo_no_estructurado_o_nombre_tipo -> nombre  \n");}
@@ -151,11 +150,11 @@ declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_n
 /* constantes, variables, interfaces */
 /*************************************/
 
-declaracion_constantes : CONSTANTE declaracion_constante_unoomas
+declaracion_constantes : declaracion_constantes CONSTANTE declaracion_constante
+                        | CONSTANTE declaracion_constante
                         ;
 
-declaracion_constante_unoomas : declaracion_constante_unoomas nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
-                              | nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
+declaracion_constante : nombre ';' tipo_no_estructurado_o_nombre_tipo '=' valor_constante
 
 valor_constante: expresion
                 | '[' valor_constante_comas ']'
@@ -187,19 +186,202 @@ declaracion_interfaces : declaracion_interfaces INTERFAZ cabecera_subprograma ';
                         | INTERFAZ cabecera_subprograma ';'
                         ;
 
-// 2.4. Declaraci´on de clases
+
+declaracion_case : CLASE final_op '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+                 | CLASE final_op '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'                  
+                 ;
+
+final_op : %empty
+          | FINAL
+          ;   
+
+declaraciones_publicas : PUBLICO declaracion_componente_unoomas
+                        | declaracion_componente_unoomas
+                        ;  
+
+declaraciones_semi : %empty
+                    | SEMIPUBLICO declaracion_componente_unoomas
+                    ;
+
+declaraciones_privadas : %empty
+                        | PRIVADO declaracion_componente_unoomas
+                        ;
+
+declaracion_componente_unoomas : declaracion_componente_unoomas declaracion_componente 
+                                declaracion_componente
+                                ;
+
+declaracion_componente : declaracion_tipo_anidado
+                       | declaracion_constante_anidada
+                       | declaracion_atributos
+                       | cabecera_subprograma ';' modificadores ';'
+                       | cabecera_subprograma ';'
+                       ;
+
+declaracion_tipo_anidado : TIPO declaracion_tipo 
+                          ;
+
+declaracion_constante_anidada : CONSTANTE declaracion_constante
+                                ;
+
+declaracion_atributos : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
+                      ;
+
+modificadores : modificador_comas
+              ;
+
+modificador_comas : modificador_comas ',' modificador
+                  | modificador 
+                  ;
+
+modificador : GENERICO
+            | ABSTRACTO
+            | ESPECIFICO
+            | FINAL
+            ;
+
 
 /****************/
 /* subprogramas */
 /****************/
 
+
+declaracion_subprograma : cabecera_subprograma bloque_subprograma
+                        ;
+
+cabecera_subprograma : cabecera_funcion
+                     | cabecera_procedimiento
+                     | cabecera_constructor
+                     | cabecera_destructor
+                     ;
+
+cabecera_funcion : FUNCION nombre declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
+                 ;
+
+cabecera_procedimiento : PROCEDIMIENTO nombre declaracion_parametros
+                        ;
+
+cabecera_constructor : CONSTRUCTOR nombre declaracion_parametros
+  ;
+
+cabecera_destructor : DESTRUCTOR nombre
+                    ;
+
+declaracion_parametros : %empty
+                      | '(' lista_parametros_formales ')'
+                      ;
+  
+lista_parametros_formales : parametros_formales
+                           | lista_parametros_formales ';' parametros_formales
+                           ;
+
+parametros_formales : nombres_comas ':' tipo_no_estructurado_o_nombre_tipo MODIFICABLE
+                    | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo
+                    ;
+
+bloque_subprograma : declaracion_tipos_op declaracion_constantes_op declaracion_variables_op bloque_instrucciones
+                    ;
+
+
+
 /*****************/
 /* instrucciones */
 /*****************/
 
+
+instruccion : ';'
+            | instruccion_asignacion
+            | instruccion_salir
+            | instruccion_devolver
+            | instruccion_llamada
+            | instruccion_si 
+            | instruccion_casos
+            | instruccion_bucle
+            | instruccion_probar_excepto
+            | instruccion_lanzar
+            ;
+
+instruccion_asignacion : objeto '=' expresion ';'
+
+instruccion_salir : SALIR SI expresion ';'
+                  | SALIR ';'
+                  ;
+
+instruccion_devolver : DEVOLVER expresion ';'
+                     | DEVOLVER ';'
+                     ;
+
+instruccion_llamada : llamada_subprograma ';'
+                    ;
+
+llamada_subprograma : nombre '(' expresion_comas ')'
+                      nombre '(' ')'
+                    ; 
+
+expresion_comas : expresion_comas ',' expresion
+                | expresion
+                ;
+
+instruccion_si : SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones
+               | SI expresion ENTONCES bloque_instrucciones
+               ;
+
+instruccion_casos : EN  CASO EXPRESION SEA caso ';'
+                  ;
+
+caso : caso entradas FLECHA_DOBLE bloque_instrucciones
+     | entradas FLECHA_DOBLE bloque_instrucciones
+     ;
+
+entradas: entrada 
+        | entradas '|' entrada 
+        ;
+
+instruccion_bucle : clausula_iteracion bloque_instrucciones
+                  ;
+
+clausula_iteracion : PARA nombre EN objeto
+                   | REPITE ELEMENTO nombre EN rango DESCENDENTE
+                   | REPITE ELEMENTO nombre EN rango
+                   | MIENTRAS expresion
+                   | REPITE HASTA expresion 
+                   ;
+
+instruccion_probar_excepto : PROBAR bloque_instrucciones EXCEPTO clausula_excepcion FINALMENTE bloque_instrucciones
+                           | PROBAR bloque_instrucciones EXCEPTO clausula_excepcion
+                           ;
+
+clausula_excepcion : CUANDO nombre EJECUTA bloque_instrucciones
+                   ;
+
+instruccion_lanzar : LANZAR nombre ';'
+                   ;
+
+
 /***************/
 /* expresiones */
 /***************/
+
+objeto : nombre
+       | objeto '[' expresion_comas ']'
+       | objeto '.' IDENTIFICADOR
+       ;
+
+expresion_constante : CTC_ENTERA
+                    | CTC_REAL
+                    | CTC_CADENA
+                    | CTC_CARACTER
+                    | CTC_BOOLEANA
+                    ;
+
+expresion_primaria : expresion_constante
+                   | objeto
+                   | llamada_subprograma
+                   | '(' expresion ')'
+                   ;
+
+
+
 
 %%
 
