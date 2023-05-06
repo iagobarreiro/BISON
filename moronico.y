@@ -27,40 +27,38 @@ programa : definicion_programa {printf("\t programa -> def_programa \n");}
 definicion_programa : PROGRAMA nombre ';' bloque_programa {printf("\t def_programa -> PROGRAMA ';' bloque_programa \n");}
           ;
 
-
-nombre : identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
+nombre :  id_op IDENTIFICADOR {printf("\t nombre -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR \n");}
           ;
 
-identificador_con_cuatro_ptos_ceroomas : 
-                                        | identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR CUATRO_PTOS {printf("\t identificador_con_cuatro_ptos_ceroomas -> identificador_con_cuatro_ptos_ceroomas IDENTIFICADOR '::' \n");}
-                                        | IDENTIFICADOR CUATRO_PTOS {printf("\t identificador_con_cuatro_ptos_ceroomas -> IDENTIFICADOR '::' \n");}
-                                        ;
+id_op : 
+      | id_op IDENTIFICADOR CUATRO_PTOS
+      ;
 
-bloque_programa : declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones \n");}
+
+bloque_programa : declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones \n");}
           ;
 
 bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instrucciones -> '{' instruccion_unoomas '}'  \n");}
             ;
 
-instruccion_unoomas : instruccion_unoomas instruccion {printf("\t instruccion_unoomas -> instruccion_unoomas instruccion  \n");}
-                      | instruccion {printf("\t instruccion_unoomas -> instruccion  \n");}
-                      | 
-                      ; 
+instruccion_unoomas :  instruccion_unoomas instruccion  {printf("\t instruccion_unoomas -> instruccion  \n");}
+                    | instruccion {printf("\t instruccion_unoomas -> instruccion_unoomas instruccion  \n");}
+                    ; 
 
 definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo {printf("\t definicion_paquete -> PAQUETE nombre ';' seccion_cabecera seccion_cuerpo  \n");}
                     ;
 
-seccion_cabecera : CABECERA declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces {printf("\t seccion_cabecera -> CABECERA declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces  \n");}
+seccion_cabecera : CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces {printf("\t seccion_cabecera -> CABECERA declaracion_cargas_op declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces  \n");}
                   ;
 
 seccion_cuerpo : CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma {printf("\t seccion_cuerpo -> CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma  \n");}
 
-declaracion_cargas_op : 
+declaracion_cargas : 
                 | CARGA declaracion_carga_unoomas ';' {printf("\t declaracion_cargas_op -> CARGA declaracion_carga_unoomas ';'  \n");}
                 ;
 
-declaracion_carga_unoomas : declaracion_carga_unoomas ',' nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> declaracion_carga_unoomas ',' nombre en_path_op nombres_op  \n");}
-                    | nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> nombre en_path_op nombres_op  \n");}
+declaracion_carga_unoomas : nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> nombre en_path_op nombres_op  \n");}
+                          | declaracion_carga_unoomas ',' nombre en_path_op nombres_op {printf("\t declaracion_carga_unoomas -> declaracion_carga_unoomas ',' nombre en_path_op nombres_op  \n");}
                     ;
 
 en_path_op : 
@@ -116,9 +114,9 @@ tipo_fichero : FICHERO {printf("\t tipo_fichero -> FICHERO  \n");}
 tipo_enumerado : '(' expresion_constante_unoomas ')' {printf("\t tipo_enumerado -> '(' expresion_constante_unoomas ')'  \n");}
                 ;
 
-expresion_constante_unoomas : expresion_constante_unoomas ',' expresion_constante {printf("\t expresion_constante_unoomas -> expresion_constante_unoomas ',' expresion_constante  \n");}
-                              | expresion_constante {printf("\t expresion_constante_unoomas -> expresion_constante  \n");}
-                              ;
+expresion_constante_unoomas : expresion_constante {printf("\t expresion_constante_unoomas -> expresion_constante  \n");}
+                            | expresion_constante_unoomas ',' expresion_constante {printf("\t expresion_constante_unoomas -> expresion_constante_unoomas ',' expresion_constante  \n");}
+                            ;
 
 tipo_lista : LISTA rango_lista DE tipo_no_estructurado_o_nombre_tipo {printf("\t tipo_lista -> LISTA rango_lista DE tipo_no_estructurado_o_nombre_tipo  \n");}
             ;
@@ -144,6 +142,7 @@ tipo_registro : REGISTRO '{' declaracion_campo '}' {printf("\t tipo_registro -> 
               ;
 
 declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';' {printf("\t declaracion_campo -> declaracion_campo nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'  \n");}                
+                  | nombres_comas ':' tipo_no_estructurado_o_nombre_tipo ';'
                   ;
 
 
@@ -191,11 +190,18 @@ declaracion_interfaces :
                         ;
 
 
-declaracion_clase : CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
-                  | CLASE FINAL '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
-                  | CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' 
-                  | CLASE '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'                 
+declaracion_clase : declaracion_clase_mod
+                  | declaracion_clase_nomod 
                   ;
+
+declaracion_clase_mod : CLASE FINAL '(' ')'  '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+                      | CLASE FINAL '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+                      ;
+
+
+declaracion_clase_nomod : CLASE '(' nombres_comas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}' 
+                        | CLASE '(' ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'                 
+                        ;
 
 
 declaraciones_publicas : PUBLICO declaracion_componente_unoomas
@@ -210,9 +216,9 @@ declaraciones_privadas :
                         | PRIVADO declaracion_componente_unoomas
                         ;
 
-declaracion_componente_unoomas : declaracion_componente_unoomas declaracion_componente 
-                                declaracion_componente
-                                ;
+declaracion_componente_unoomas : declaracion_componente
+                               | declaracion_componente_unoomas declaracion_componente 
+                               ;
 
 declaracion_componente : declaracion_tipo_anidado
                        | declaracion_constante_anidada
@@ -222,7 +228,7 @@ declaracion_componente : declaracion_tipo_anidado
                        ;
 
 declaracion_tipo_anidado : TIPO declaracion_tipo 
-                          ;
+                         ;
 
 declaracion_constante_anidada : CONSTANTE declaracion_constante
                                 ;
@@ -337,9 +343,11 @@ caso : caso entradas FLECHA_DOBLE bloque_instrucciones
      | entradas FLECHA_DOBLE bloque_instrucciones
      ;
 
-entradas: entrada 
-        | entradas '|' entrada 
+entradas: entradas_op entrada 
         ;
+entradas_op : 
+            | entradas_op entrada '|'
+            ;
 
 entrada : expresion 
         | rango
@@ -391,7 +399,7 @@ expresion_primaria : expresion_constante
 
 
 
-expresion : 
+expresion : expresion_primaria
           ;
 %%
 
