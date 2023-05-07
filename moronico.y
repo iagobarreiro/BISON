@@ -363,7 +363,7 @@ instruccion_llamada : llamada_subprograma ';' {printf("\t instruccion_llamada ->
                     ;
 
 llamada_subprograma : nombre '(' expresion_comas ')' {printf("\t llamada_subprograma -> nombre '(' expresion_comas ')'  \n");}
-                      nombre '(' ')' {printf("\t llamada_subprograma -> nombre '(' ')'  \n");}
+                    |  nombre '(' ')' {printf("\t llamada_subprograma -> nombre '(' ')'  \n");}
                     ; 
 
 expresion_comas : expresion_comas ',' expresion {printf("\t expresion_comas -> expresion_comas ',' expresion  \n");}
@@ -500,6 +500,7 @@ expresion_or_logico : expresion_and_logico OR expresion_or_logico {printf("\t ex
                     
 
 expresion : expresion_or_logico {printf("\t expresion -> expresion_or_logico  \n");}
+          | error ';' {yyerrok; };
           ;
 %%
 
