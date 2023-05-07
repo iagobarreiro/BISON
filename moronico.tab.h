@@ -39,63 +39,63 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     ABSTRACTO = 258,
-     AND = 259,
-     ASOCIATIVA = 260,
-     BOOLEANO = 261,
-     CABECERA = 262,
-     CADENA = 263,
-     CASO = 264,
-     CARACTER = 265,
-     CARGA = 266,
-     CLASE = 267,
-     CONJUNTO = 268,
-     CONSTANTE = 269,
-     CUERPO = 270,
-     CTC_BOOLEANA = 271,
-     CTC_CADENA = 272,
-     CTC_CARACTER = 273,
-     CTC_ENTERA = 274,
-     CTC_REAL = 275,
-     CONSTRUCTOR = 276,
-     CUANDO = 277,
-     CUATRO_PTOS = 278,
-     DESCENDENTE = 279,
-     DESPD = 280,
-     DESPI = 281,
-     DESTRUCTOR = 282,
-     DE = 283,
-     DEVOLVER = 284,
-     DOS_PTOS = 285,
-     EJECUTA = 286,
-     ELEMENTO = 287,
-     EN = 288,
-     ENTERO = 289,
-     ENTONCES = 290,
-     EQ = 291,
-     ESPECIFICO = 292,
-     EXCEPTO = 293,
-     FICHERO = 294,
-     FINAL = 295,
-     FINALMENTE = 296,
-     FLECHA_DOBLE = 297,
-     FUNCION = 298,
-     GEQ = 299,
-     GENERICO = 300,
-     HASTA = 301,
-     IDENTIFICADOR = 302,
-     INTERFAZ = 303,
-     LANZAR = 304,
-     LEQ = 305,
-     LISTA = 306,
-     MIENTRAS = 307,
-     MODIFICABLE = 308,
-     NEQ = 309,
-     OTRO = 310,
-     OR = 311,
-     PAQUETE = 312,
-     PARA = 313,
-     PATH = 314,
+     CTC_BOOLEANA = 258,
+     CTC_CADENA = 259,
+     CTC_CARACTER = 260,
+     CTC_ENTERA = 261,
+     CTC_REAL = 262,
+     PATH = 263,
+     IDENTIFICADOR = 264,
+     ABSTRACTO = 265,
+     AND = 266,
+     ASOCIATIVA = 267,
+     BOOLEANO = 268,
+     CABECERA = 269,
+     CADENA = 270,
+     CASO = 271,
+     CARACTER = 272,
+     CARGA = 273,
+     CLASE = 274,
+     CONJUNTO = 275,
+     CONSTANTE = 276,
+     CUERPO = 277,
+     CONSTRUCTOR = 278,
+     CUANDO = 279,
+     CUATRO_PTOS = 280,
+     DESCENDENTE = 281,
+     DESPD = 282,
+     DESPI = 283,
+     DESTRUCTOR = 284,
+     DE = 285,
+     DEVOLVER = 286,
+     DOS_PTOS = 287,
+     EJECUTA = 288,
+     ELEMENTO = 289,
+     EN = 290,
+     ENTERO = 291,
+     ENTONCES = 292,
+     EQ = 293,
+     ESPECIFICO = 294,
+     EXCEPTO = 295,
+     FICHERO = 296,
+     FINAL = 297,
+     FINALMENTE = 298,
+     FLECHA_DOBLE = 299,
+     FUNCION = 300,
+     GEQ = 301,
+     GENERICO = 302,
+     HASTA = 303,
+     INTERFAZ = 304,
+     LANZAR = 305,
+     LEQ = 306,
+     LISTA = 307,
+     MIENTRAS = 308,
+     MODIFICABLE = 309,
+     NEQ = 310,
+     OTRO = 311,
+     OR = 312,
+     PAQUETE = 313,
+     PARA = 314,
      POTENCIA = 315,
      PRIVADO = 316,
      PROBAR = 317,
@@ -118,7 +118,23 @@
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+{
+
+/* Line 1676 of yacc.c  */
+#line 15 ".\\moronico.y"
+
+  int     val_int;
+  double  val_double;
+  char*   val_string;
+  char    val_char;
+  char    val_bool;
+
+
+
+/* Line 1676 of yacc.c  */
+#line 137 "moronico.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
