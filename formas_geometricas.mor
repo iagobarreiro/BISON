@@ -47,7 +47,6 @@ CABECERA
     PI : real = 3'14;
 
 CUERPO
-
   funcion esfera::volumen => real
   {
     devolver (4/3*PI*actual.radio**3);

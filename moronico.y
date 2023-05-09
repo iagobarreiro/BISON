@@ -39,8 +39,7 @@ id_op :
       ;
 
 
-bloque_programa : declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones\n");}
-                | error ';' {yyerrok; };         
+bloque_programa : declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones {printf("\t bloque_programa -> declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones\n");}       
           ;
 
 bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instrucciones -> '{' instruccion_unoomas '}'  \n");}
@@ -50,6 +49,7 @@ bloque_instrucciones : '{' instruccion_unoomas '}' {printf("\t bloque_instruccio
 instruccion_unoomas : instruccion_unoomas instruccion  {printf("\t instruccion_unoomas -> instruccion_unoomas instruccion   \n");}
                     | instruccion {printf("\t instruccion_unoomas -> instruccion  \n");}
                     ; 
+                    
 
 definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo {printf("\t definicion_paquete -> PAQUETE nombre ';' seccion_cabecera seccion_cuerpo  \n");}
                     ;
@@ -58,6 +58,7 @@ seccion_cabecera : CABECERA declaracion_cargas declaracion_tipos declaracion_con
                   ;
 
 seccion_cuerpo : CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma {printf("\t seccion_cuerpo -> CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma  \n");}
+                ;
 
 declaracion_cargas : 
                 | CARGA declaracion_carga ';' {printf("\t declaracion_cargas -> CARGA declaracion_carga ';'  \n");}
@@ -163,7 +164,8 @@ declaracion_campo : declaracion_campo nombres_comas ':' tipo_no_estructurado_o_n
 /* constantes, variables, interfaces */
 /*************************************/
 
-declaracion_constantes :| CONSTANTE declaracion_constante_unoomas {printf("\t declaracion_constantes -> CONSTANTE declaracion_constante_unoomas   \n");}
+declaracion_constantes :
+                        | CONSTANTE declaracion_constante_unoomas {printf("\t declaracion_constantes -> CONSTANTE declaracion_constante_unoomas   \n");}
                         ;
 
 declaracion_constante_unoomas : declaracion_constante_unoomas declaracion_constante {printf("\t declaracion_constante_unoomas -> declaracion_constante_unoomas declaracion_constante  \n");}
@@ -205,7 +207,8 @@ declaracion_variable :  declaracion_variable nombres_comas ':' tipo_no_estructur
                       ;
 
 
-declaracion_interfaces : INTERFAZ cabecera_subprograma_unoomas_ptocoma {printf("\t declaracion_interfaces -> INTERFAZ cabecera_subprograma_unoomas_ptocoma  \n");}
+declaracion_interfaces :
+                        | INTERFAZ cabecera_subprograma_unoomas_ptocoma {printf("\t declaracion_interfaces -> INTERFAZ cabecera_subprograma_unoomas_ptocoma  \n");}
                         ;
 
 
@@ -335,6 +338,7 @@ instruccion : ';' {printf("\t instruccion -> ';'  \n");}
             ; 
 
 instruccion_asignacion : objeto '=' expresion ';' {printf("\t instruccion_asignacion -> objeto '=' expresion ';'  \n");}
+                        ;
 
 instruccion_salir : SALIR SI expresion ';' {printf("\t instruccion_salir -> SALIR SI expresion ';'  \n");}
                   | SALIR ';' {printf("\t instruccion_salir -> SALIR ';'  \n");}
